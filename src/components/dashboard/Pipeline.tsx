@@ -1,20 +1,44 @@
-type Stage = {
-  label: string;
-  count: number;
-  value: string;
-  pct: number; // 0-100 fill width
-  color: string;
-};
+import type { PipelineStage } from "@/lib/mockApi";
 
-const STAGES: Stage[] = [
-  { label: "New Leads",    count: 284, value: "$1.2M",  pct: 100, color: "bg-brand-500" },
-  { label: "Qualified",   count: 171, value: "$840k",  pct: 60,  color: "bg-brand-400" },
-  { label: "Proposal",    count: 98,  value: "$520k",  pct: 34,  color: "bg-brand-300" },
-  { label: "Negotiation", count: 54,  value: "$310k",  pct: 19,  color: "bg-brand-200" },
-  { label: "Closed Won",  count: 38,  value: "$210k",  pct: 13,  color: "bg-green-400" },
+type Stage = PipelineStage & { color: string };
+
+// UI-only colours per stage index
+const STAGE_COLORS = [
+  "bg-brand-500",
+  "bg-brand-400",
+  "bg-brand-300",
+  "bg-brand-200",
+  "bg-green-400",
 ];
 
-export function Pipeline() {
+function PipelineSkeleton() {
+  return (
+    <div className="flex animate-pulse flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-card">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="h-4 w-16 rounded bg-gray-100" />
+          <div className="h-3 w-28 rounded bg-gray-100" />
+        </div>
+        <div className="h-5 w-16 rounded-full bg-gray-100" />
+      </div>
+      {[1,2,3,4,5].map((i) => (
+        <div key={i} className="flex flex-col gap-1.5">
+          <div className="h-3 w-full rounded bg-gray-100" />
+          <div className="h-1.5 w-full rounded-full bg-gray-100" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function Pipeline({ data }: { data?: PipelineStage[] }) {
+  if (!data) return <PipelineSkeleton />;
+
+  const stages: Stage[] = data.map((s, i) => ({
+    ...s,
+    color: STAGE_COLORS[i] ?? "bg-brand-500",
+  }));
+
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-card">
       {/* header */}
@@ -24,13 +48,13 @@ export function Pipeline() {
           <p className="text-body-sm text-gray-400">Deal stages overview</p>
         </div>
         <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-body-sm font-medium text-brand-600">
-          {STAGES.reduce((s, x) => s + x.count, 0)} total
+          {stages.reduce((s, x) => s + x.count, 0)} total
         </span>
       </div>
 
       {/* stages */}
       <div className="flex flex-col gap-3">
-        {STAGES.map((s) => (
+        {stages.map((s) => (
           <div key={s.label} className="flex flex-col gap-1">
             {/* label row */}
             <div className="flex items-center justify-between text-body-sm">
@@ -55,7 +79,9 @@ export function Pipeline() {
       <div className="flex items-center justify-between rounded-lg bg-gray-50 px-3.5 py-2.5 text-body-sm">
         <span className="text-gray-500">Conversion rate</span>
         <span className="font-semibold text-green-600">
-          {((38 / 284) * 100).toFixed(1)}%
+          {stages.length >= 2
+            ? ((stages[stages.length - 1].count / stages[0].count) * 100).toFixed(1)
+            : "0.0"}%
         </span>
       </div>
     </div>

@@ -1,3 +1,7 @@
+"use client";
+
+import { useAtomValue } from "jotai";
+import { dashboardAtom } from "@/store/dashboardAtoms";
 import { DashboardHeader } from "./Header";
 import { KpiCards }       from "./KpiCards";
 import { RevenueChart }   from "./RevenueChart";
@@ -6,43 +10,49 @@ import { ActivityFeed }   from "./ActivityFeed";
 import { Tasks }          from "./Tasks";
 
 export function DashboardShell() {
+  const result  = useAtomValue(dashboardAtom);
+  const data    = result.state === "hasData" ? result.data : undefined;
+  const isError = result.state === "hasError";
+
   return (
-    /*
-     * Outer shell: flex column, fills remaining viewport height, scrollable.
-     * The Header is full-bleed (owns its own px-6 + border-b).
-     * Everything below gets p-6 / gap-6 via the inner content div.
-     */
     <div className="flex flex-1 flex-col overflow-y-auto">
       {/* ── Header (full-bleed, sticky) ── */}
       <div className="sticky top-0 z-10 bg-white">
         <DashboardHeader />
       </div>
 
+      {/* ── Error banner ── */}
+      {isError && (
+        <div className="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-body-sm text-red-600">
+          Failed to load dashboard data. Please try again.
+        </div>
+      )}
+
       {/* ── Scrollable content ── */}
       <div className="flex flex-col gap-6 p-6">
 
         {/* ── KPI Cards row ── */}
-        <KpiCards />
+        <KpiCards data={data?.kpis} />
 
-      {/*
-       * ── Main grid ──────────────────────────────────────────────────────
-       *  Mobile  : single column (stacked)
-       *  Desktop : left  = 3fr  (revenue + pipeline)
-       *            right = 1.2fr (activity + tasks)
-       * ─────────────────────────────────────────────────────────────────
-       */}
+        {/*
+         * ── Main grid ──────────────────────────────────────────────────────
+         *  Mobile  : single column (stacked)
+         *  Desktop : left  = 3fr  (revenue + pipeline)
+         *            right = 1.2fr (activity + tasks)
+         * ─────────────────────────────────────────────────────────────────
+         */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_1.2fr]">
 
           {/* ── Left column ── */}
           <div className="flex flex-col gap-6">
-            <RevenueChart />
-            <Pipeline />
+            <RevenueChart data={data?.revenue} />
+            <Pipeline data={data?.pipeline} />
           </div>
 
           {/* ── Right column ── */}
           <div className="flex flex-col gap-6">
-            <ActivityFeed />
-            <Tasks />
+            <ActivityFeed items={data?.activities} />
+            <Tasks initialTasks={data?.tasks} />
           </div>
 
         </div>

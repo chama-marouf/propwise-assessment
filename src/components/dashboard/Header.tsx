@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useAtom } from "jotai";
+import { periodAtom } from "@/store/dashboardAtoms";
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
@@ -43,7 +45,7 @@ type DateTab = (typeof DATE_TABS)[number];
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function DashboardHeader() {
-  const [activeTab, setActiveTab]       = useState<DateTab>("This Month");
+  const [activeTab, setActiveTab] = useAtom(periodAtom);
   const [indicator, setIndicator]       = useState({ left: 0, width: 0 });
   const [indicatorReady, setReady]      = useState(false);
 

@@ -182,13 +182,40 @@ function TimelineItem({ item, isLast }: { item: ActivityItem; isLast: boolean })
   );
 }
 
+// ── Skeleton ─────────────────────────────────────────────────────────────────
+
+function ActivitySkeleton() {
+  return (
+    <div className="flex animate-pulse flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-card">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="h-4 w-16 rounded bg-gray-100" />
+          <div className="h-3 w-24 rounded bg-gray-100" />
+        </div>
+        <div className="h-4 w-12 rounded bg-gray-100" />
+      </div>
+      {[1,2,3,4].map((i) => (
+        <div key={i} className="flex items-start gap-3 pb-3">
+          <div className="h-7 w-7 rounded-full bg-gray-100" />
+          <div className="flex flex-1 flex-col gap-1.5">
+            <div className="h-3 w-full rounded bg-gray-100" />
+            <div className="h-3 w-2/3 rounded bg-gray-100" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function ActivityFeed() {
+export function ActivityFeed({ items }: { items?: ActivityItem[] }) {
+  if (!items) return <ActivitySkeleton />;
+
   // Pre-group items
   const grouped = GROUP_ORDER.map((g) => ({
     group: g,
-    items: ITEMS.filter((i) => i.group === g),
+    items: items.filter((i) => i.group === g),
   })).filter((g) => g.items.length > 0);
 
   return (

@@ -9,10 +9,11 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import type { RevenuePoint } from "@/lib/mockApi";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
-type DataPoint = { month: string; thisYear: number; lastYear: number };
+type DataPoint = RevenuePoint;
 
 const DATA: DataPoint[] = [
   { month: "Jan", thisYear: 58,  lastYear: 44 },
@@ -63,7 +64,35 @@ function CustomTooltip({ active, payload, label }: {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function RevenueChart() {
+function RevenueChartSkeleton() {
+  return (
+    <div className="flex animate-pulse flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5 shadow-card">
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="h-3 w-28 rounded bg-gray-100" />
+          <div className="h-7 w-32 rounded bg-gray-100" />
+          <div className="h-3 w-24 rounded bg-gray-100" />
+        </div>
+        <div className="flex gap-3 pt-1">
+          <div className="h-4 w-20 rounded-full bg-gray-100" />
+          <div className="h-4 w-20 rounded-full bg-gray-100" />
+        </div>
+      </div>
+      <div className="h-52 w-full rounded-lg bg-gray-100" />
+      <div className="grid grid-cols-3 gap-3 border-t border-gray-100 pt-4">
+        {[1,2,3].map((i) => <div key={i} className="h-8 rounded bg-gray-100" />)}
+      </div>
+    </div>
+  );
+}
+
+export function RevenueChart({ data }: { data?: DataPoint[] }) {
+  if (!data) return <RevenueChartSkeleton />;
+
+  const TOTAL_THIS  = data.reduce((s, d) => s + d.thisYear,  0);
+  const TOTAL_LAST  = data.reduce((s, d) => s + d.lastYear,  0);
+  const GROWTH_PCT  = (((TOTAL_THIS - TOTAL_LAST) / TOTAL_LAST) * 100).toFixed(1);
+
   return (
     <div className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5 shadow-card">
 
@@ -103,7 +132,7 @@ export function RevenueChart() {
       {/* ── Chart ── */}
       <div className="h-52 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={DATA} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
+            <AreaChart data={data} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
             <defs>
               {/* This year gradient */}
               <linearGradient id="grad-this" x1="0" y1="0" x2="0" y2="1">

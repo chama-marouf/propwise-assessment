@@ -1,5 +1,6 @@
 "use client";
 
+import type { KpiData } from "@/lib/mockApi";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -198,59 +199,56 @@ export function KpiCard({
   );
 }
 
-// ── Data + section ────────────────────────────────────────────────────────────
+// ── Icon / accent / colour lookup (UI concerns not in API) ───────────────────
 
-const CARDS: KpiCardDef[] = [
-  {
-    label:          "Total Revenue",
-    value:          "$842,500",
-    sub:            "vs $720k last quarter",
-    trendDirection: "up",
-    trend:          "+17.0%",
-    icon:           <IconDollar />,
-    accent:         "bg-brand-50",
-    iconColor:      "text-brand-500",
-    sparklineData:  [52, 60, 55, 70, 65, 80, 72, 88, 78, 95, 90, 100],
-  },
-  {
-    label:          "Active Leads",
-    value:          "284",
-    sub:            "vs 241 last month",
-    trendDirection: "up",
-    trend:          "+17.8%",
-    icon:           <IconUsers />,
-    accent:         "bg-green-50",
-    iconColor:      "text-green-600",
-    sparklineData:  [180, 200, 190, 220, 210, 240, 230, 255, 245, 265, 260, 284],
-  },
-  {
-    label:          "Deals Closed",
-    value:          "38",
-    sub:            "vs 42 last month",
-    trendDirection: "down",
-    trend:          "−9.5%",
-    icon:           <IconTarget />,
-    accent:         "bg-orange-50",
-    iconColor:      "text-orange-500",
-    sparklineData:  [48, 45, 50, 46, 44, 47, 43, 42, 40, 39, 41, 38],
-  },
-  {
-    label:          "Listings",
-    value:          "127",
-    sub:            "same as last month",
-    trendDirection: "flat",
-    trend:          "0%",
-    icon:           <IconBuilding />,
-    accent:         "bg-purple-50",
-    iconColor:      "text-purple-500",
-    sparklineData:  [122, 126, 123, 128, 125, 127, 124, 126, 128, 125, 127, 127],
-  },
-];
+const ICON_CONFIG: Record<string, Pick<KpiCardDef, "icon" | "accent" | "iconColor">> = {
+  "Total Revenue": { icon: <IconDollar />,   accent: "bg-brand-50",  iconColor: "text-brand-500"  },
+  "Active Leads":  { icon: <IconUsers />,    accent: "bg-green-50",  iconColor: "text-green-600"  },
+  "Deals Closed":  { icon: <IconTarget />,   accent: "bg-orange-50", iconColor: "text-orange-500" },
+  "Listings":      { icon: <IconBuilding />, accent: "bg-purple-50", iconColor: "text-purple-500" },
+};
 
-export function KpiCards() {
+const FALLBACK_ICON = { icon: <IconDollar />, accent: "bg-brand-50", iconColor: "text-brand-500" };
+
+// ── Skeleton ──────────────────────────────────────────────────────────────────
+
+function KpiCardSkeleton() {
+  return (
+    <div className="flex animate-pulse flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-card">
+      <div className="flex items-start justify-between">
+        <div className="h-10 w-10 rounded-xl bg-gray-100" />
+        <div className="h-5 w-14 rounded-full bg-gray-100" />
+      </div>
+      <div className="mt-4 flex flex-col gap-2">
+        <div className="h-6 w-24 rounded bg-gray-100" />
+        <div className="h-3 w-20 rounded bg-gray-100" />
+      </div>
+      <div className="mt-3 h-px w-full bg-gray-100" />
+      <div className="mt-3 h-3 w-32 rounded bg-gray-100" />
+      <div className="mt-3 h-12 w-full rounded bg-gray-100" />
+    </div>
+  );
+}
+
+// ── Section ───────────────────────────────────────────────────────────────────
+
+export function KpiCards({ data }: { data?: KpiData[] }) {
+  if (!data) {
+    return (
+      <section aria-label="KPI summary" className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => <KpiCardSkeleton key={i} />)}
+      </section>
+    );
+  }
+
+  const cards: KpiCardDef[] = data.map((d) => ({
+    ...d,
+    ...(ICON_CONFIG[d.label] ?? FALLBACK_ICON),
+  }));
+
   return (
     <section aria-label="KPI summary" className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {CARDS.map((c) => (
+      {cards.map((c) => (
         <KpiCard key={c.label} {...c} />
       ))}
     </section>
