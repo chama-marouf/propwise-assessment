@@ -1,5 +1,5 @@
-import { Sidebar }        from "@/components/sidebar";
-import { DashboardShell } from "@/components/dashboard";
+import { Sidebar }        from "@/components/layout/sidebar";
+import { DashboardShell } from "@/components/pages/dashboard";
 
 export default function DashboardPage() {
   return (

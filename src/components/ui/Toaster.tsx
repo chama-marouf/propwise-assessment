@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
-import { toastsAtom, type Toast, type ToastType } from "@/store/toastAtoms";
+import { toastsAtom } from "@/store";
+import type { Toast, ToastType } from "@/types/dashboard";
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 

@@ -9,13 +9,11 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
-import type { RevenuePoint } from "@/lib/mockApi";
+import type { RevenuePoint } from "@/types/dashboard";
+import { RevenueForecastSkeleton } from "./dashboard-skeleton";
 
-// ── Types & colours ──────────────────────────────────────────────────────────
+// ── Colours ───────────────────────────────────────────────────────────────────
 
-type DataPoint = RevenuePoint;
-
-// Colours — raw hex so Recharts SVG can consume them
 const C_THIS = "#3D52D5"; // brand-500
 const C_LAST = "#A5B4FC"; // brand-300
 
@@ -45,41 +43,22 @@ function CustomTooltip({ active, payload, label }: {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-function RevenueChartSkeleton() {
-  return (
-    <div className="flex animate-pulse flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5 shadow-card">
-      <div className="flex items-start justify-between">
-        <div className="flex flex-col gap-2">
-          <div className="h-3 w-28 rounded bg-gray-100" />
-          <div className="h-7 w-32 rounded bg-gray-100" />
-          <div className="h-3 w-24 rounded bg-gray-100" />
-        </div>
-        <div className="flex gap-3 pt-1">
-          <div className="h-4 w-20 rounded-full bg-gray-100" />
-          <div className="h-4 w-20 rounded-full bg-gray-100" />
-        </div>
-      </div>
-      <div className="h-52 w-full rounded-lg bg-gray-100" />
-      <div className="grid grid-cols-3 gap-3 border-t border-gray-100 pt-4">
-        {[1,2,3].map((i) => <div key={i} className="h-8 rounded bg-gray-100" />)}
-      </div>
-    </div>
-  );
+interface RevenueForecastProps {
+  data?: RevenuePoint[];
 }
 
-export function RevenueChart({ data }: { data?: DataPoint[] }) {
-  if (!data) return <RevenueChartSkeleton />;
+export function RevenueForecast({ data }: RevenueForecastProps) {
+  if (!data) return <RevenueForecastSkeleton />;
 
-  const TOTAL_THIS  = data.reduce((s, d) => s + d.thisYear,  0);
-  const TOTAL_LAST  = data.reduce((s, d) => s + d.lastYear,  0);
-  const GROWTH_PCT  = (((TOTAL_THIS - TOTAL_LAST) / TOTAL_LAST) * 100).toFixed(1);
+  const TOTAL_THIS = data.reduce((s, d) => s + d.thisYear, 0);
+  const TOTAL_LAST = data.reduce((s, d) => s + d.lastYear, 0);
+  const GROWTH_PCT = (((TOTAL_THIS - TOTAL_LAST) / TOTAL_LAST) * 100).toFixed(1);
 
   return (
     <div className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5 shadow-card">
 
-      {/* ── Header row ── */}
+      {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
-        {/* title + total */}
         <div className="flex flex-col gap-0.5">
           <p className="text-body-sm text-gray-400">Revenue Forecast</p>
           <div className="flex items-baseline gap-2">
@@ -96,8 +75,6 @@ export function RevenueChart({ data }: { data?: DataPoint[] }) {
           </div>
           <p className="text-body-sm text-gray-400">Jan – Dec 2026</p>
         </div>
-
-        {/* legend */}
         <div className="flex items-center gap-4 pt-1 text-body-sm text-gray-500">
           <span className="flex items-center gap-1.5">
             <span className="h-2.5 w-5 rounded-full" style={{ background: C_THIS }} />
@@ -110,29 +87,21 @@ export function RevenueChart({ data }: { data?: DataPoint[] }) {
         </div>
       </div>
 
-      {/* ── Chart ── */}
+      {/* Chart */}
       <div className="h-52 w-full">
         <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
             <defs>
-              {/* This year gradient */}
-              <linearGradient id="grad-this" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="rev-grad-this" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%"  stopColor={C_THIS} stopOpacity={0.18} />
-                <stop offset="95%" stopColor={C_THIS} stopOpacity={0}    />
+                <stop offset="95%" stopColor={C_THIS} stopOpacity={0} />
               </linearGradient>
-              {/* Last year gradient */}
-              <linearGradient id="grad-last" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="rev-grad-last" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%"  stopColor={C_LAST} stopOpacity={0.25} />
-                <stop offset="95%" stopColor={C_LAST} stopOpacity={0}    />
+                <stop offset="95%" stopColor={C_LAST} stopOpacity={0} />
               </linearGradient>
             </defs>
-
-            <CartesianGrid
-              vertical={false}
-              stroke="#E4E4E7"
-              strokeDasharray="3 3"
-            />
-
+            <CartesianGrid vertical={false} stroke="#E4E4E7" strokeDasharray="3 3" />
             <XAxis
               dataKey="month"
               tick={{ fontSize: 11, fill: "#A0A0AB" }}
@@ -140,40 +109,34 @@ export function RevenueChart({ data }: { data?: DataPoint[] }) {
               axisLine={false}
               dy={6}
             />
-
             <YAxis
               tick={{ fontSize: 11, fill: "#A0A0AB" }}
               tickLine={false}
               axisLine={false}
               tickFormatter={(v) => `$${v}k`}
             />
-
             <Tooltip
               content={<CustomTooltip />}
               cursor={{ stroke: "#E4E4E7", strokeWidth: 1 }}
             />
-
-            {/* Last year — render first so this year sits on top */}
             <Area
               type="monotone"
               dataKey="lastYear"
               name="lastYear"
               stroke={C_LAST}
               strokeWidth={1.5}
-              fill="url(#grad-last)"
+              fill="url(#rev-grad-last)"
               dot={false}
               activeDot={{ r: 4, fill: C_LAST, strokeWidth: 0 }}
               isAnimationActive={false}
             />
-
-            {/* This year */}
             <Area
               type="monotone"
               dataKey="thisYear"
               name="thisYear"
               stroke={C_THIS}
               strokeWidth={2}
-              fill="url(#grad-this)"
+              fill="url(#rev-grad-this)"
               dot={false}
               activeDot={{ r: 4, fill: C_THIS, strokeWidth: 0 }}
               isAnimationActive={false}
@@ -182,12 +145,12 @@ export function RevenueChart({ data }: { data?: DataPoint[] }) {
         </ResponsiveContainer>
       </div>
 
-      {/* ── Summary strip ── */}
+      {/* Summary strip */}
       <div className="grid grid-cols-3 gap-3 border-t border-gray-100 pt-4">
         {[
-          { label: "This Year",  val: `$${(TOTAL_THIS / 10).toFixed(1)}M`, color: "text-gray-900"  },
-          { label: "Last Year",  val: `$${(TOTAL_LAST / 10).toFixed(1)}M`, color: "text-gray-400"  },
-          { label: "Growth",     val: `+${GROWTH_PCT}%`,                   color: "text-green-600" },
+          { label: "This Year", val: `$${(TOTAL_THIS / 10).toFixed(1)}M`, color: "text-gray-900"  },
+          { label: "Last Year", val: `$${(TOTAL_LAST / 10).toFixed(1)}M`, color: "text-gray-400"  },
+          { label: "Growth",    val: `+${GROWTH_PCT}%`,                   color: "text-green-600" },
         ].map((s) => (
           <div key={s.label} className="flex flex-col gap-0.5">
             <p className={`text-body font-semibold ${s.color}`}>{s.val}</p>
