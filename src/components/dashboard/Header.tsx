@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useAtom } from "jotai";
 import { periodAtom } from "@/store/dashboardAtoms";
+import { useToast } from "@/hooks/useToast";
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
@@ -48,6 +49,7 @@ export function DashboardHeader() {
   const [activeTab, setActiveTab] = useAtom(periodAtom);
   const [indicator, setIndicator]       = useState({ left: 0, width: 0 });
   const [indicatorReady, setReady]      = useState(false);
+  const { success, error, info, neutral } = useToast();
 
   const tabsWrapRef = useRef<HTMLDivElement>(null);
   const btnRefs     = useRef<(HTMLButtonElement | null)[]>([]);
@@ -119,9 +121,20 @@ export function DashboardHeader() {
             <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
           </button>
 
-          {/* Create */}
+          {/* Create — fires demo toasts to exercise the toast system */}
           <button
             type="button"
+            onClick={() => {
+              success("Deal closed successfully", {
+                action: { label: "View deal", onClick: () => {}, icon: "retry" },
+              });
+              setTimeout(() => neutral("Draft saved automatically"), 400);
+              setTimeout(() => info(`Showing data for ${activeTab}`), 800);
+              setTimeout(() =>
+                error("Sync failed. Could not reach server", {
+                  action: { label: "Retry", onClick: () => success("Synced!"), icon: "retry" },
+                }), 1200);
+            }}
             className="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3.5 py-2 text-body font-semibold text-white shadow-xs transition-all hover:bg-brand-600 active:scale-95"
           >
             <IconPlus />
