@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useAtom } from "jotai";
+import { sidebarOpenAtom } from "@/store/sidebarAtom";
 
 // ── Icon primitives ───────────────────────────────────────────────────────────
 
@@ -210,9 +212,30 @@ function NavLink({
 
 export function Sidebar() {
   const [activeId, setActiveId] = useState<string>("dashboard");
+  const [open, setOpen] = useAtom(sidebarOpenAtom);
 
   return (
-    <aside className="flex h-screen w-56 shrink-0 flex-col border-r border-gray-200 bg-white">
+    <>
+      {/* ── Mobile backdrop ── */}
+      {open && (
+        <div
+          aria-hidden
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-20 bg-gray-900/40 lg:hidden"
+        />
+      )}
+
+      <aside
+        className={[
+          // Base
+          "flex h-screen w-56 shrink-0 flex-col border-r border-gray-200 bg-white",
+          // Mobile: fixed overlay, slides in from left
+          "fixed inset-y-0 left-0 z-30 transition-transform duration-300 ease-out",
+          open ? "translate-x-0" : "-translate-x-full",
+          // Desktop: always visible, static in flow
+          "lg:relative lg:translate-x-0 lg:z-auto",
+        ].join(" ")}
+      >
 
       {/* ── User Profile ── */}
       <div className="mx-2 mt-3 mb-2">
@@ -289,5 +312,6 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }

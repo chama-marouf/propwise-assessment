@@ -3,11 +3,18 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useAtom } from "jotai";
 import { periodAtom } from "@/store/dashboardAtoms";
+import { sidebarOpenAtom } from "@/store/sidebarAtom";
 import { useToast } from "@/hooks/useToast";
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
 type SVG = { className?: string };
+
+const IconMenu = ({ className }: SVG) => (
+  <svg className={className} width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+    <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
 
 const IconPlus = ({ className }: SVG) => (
   <svg className={className} width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
@@ -47,6 +54,7 @@ type DateTab = (typeof DATE_TABS)[number];
 
 export function DashboardHeader() {
   const [activeTab, setActiveTab] = useAtom(periodAtom);
+  const [, setSidebarOpen]        = useAtom(sidebarOpenAtom);
   const [indicator, setIndicator]       = useState({ left: 0, width: 0 });
   const [indicatorReady, setReady]      = useState(false);
   const { success, error, info, neutral } = useToast();
@@ -94,7 +102,17 @@ export function DashboardHeader() {
     <header className="flex flex-col gap-0 border-b border-gray-200 bg-white">
 
       {/* ── Top row: title + actions ── */}
-      <div className="flex items-start justify-between gap-4 px-6 pb-4 pt-5">
+      <div className="flex items-start justify-between gap-4 px-4 pb-4 pt-5 md:px-6">
+
+        {/* Hamburger — mobile only */}
+        <button
+          type="button"
+          aria-label="Open menu"
+          onClick={() => setSidebarOpen(true)}
+          className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 lg:hidden"
+        >
+          <IconMenu />
+        </button>
 
         {/* Left: title block */}
         <div className="flex flex-col gap-0.5">

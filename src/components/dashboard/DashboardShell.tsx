@@ -15,7 +15,7 @@ export function DashboardShell() {
   const isError = result.state === "hasError";
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto">
+    <div className="flex flex-1 flex-col overflow-y-auto min-w-0">
       {/* ── Header (full-bleed, sticky) ── */}
       <div className="sticky top-0 z-10 bg-white">
         <DashboardHeader />
@@ -29,7 +29,7 @@ export function DashboardShell() {
       )}
 
       {/* ── Scrollable content ── */}
-      <div className="flex flex-col gap-6 p-6">
+      <div className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
 
         {/* ── KPI Cards row ── */}
         <KpiCards data={data?.kpis} />
