@@ -11,28 +11,9 @@ import {
 } from "recharts";
 import type { RevenuePoint } from "@/lib/mockApi";
 
-// ── Data ──────────────────────────────────────────────────────────────────────
+// ── Types & colours ──────────────────────────────────────────────────────────
 
 type DataPoint = RevenuePoint;
-
-const DATA: DataPoint[] = [
-  { month: "Jan", thisYear: 58,  lastYear: 44 },
-  { month: "Feb", thisYear: 72,  lastYear: 53 },
-  { month: "Mar", thisYear: 65,  lastYear: 60 },
-  { month: "Apr", thisYear: 84,  lastYear: 58 },
-  { month: "May", thisYear: 91,  lastYear: 70 },
-  { month: "Jun", thisYear: 78,  lastYear: 74 },
-  { month: "Jul", thisYear: 104, lastYear: 80 },
-  { month: "Aug", thisYear: 112, lastYear: 85 },
-  { month: "Sep", thisYear: 98,  lastYear: 79 },
-  { month: "Oct", thisYear: 125, lastYear: 92 },
-  { month: "Nov", thisYear: 137, lastYear: 98 },
-  { month: "Dec", thisYear: 143, lastYear: 105 },
-];
-
-const TOTAL_THIS  = DATA.reduce((s, d) => s + d.thisYear,  0);
-const TOTAL_LAST  = DATA.reduce((s, d) => s + d.lastYear,  0);
-const GROWTH_PCT  = (((TOTAL_THIS - TOTAL_LAST) / TOTAL_LAST) * 100).toFixed(1);
 
 // Colours — raw hex so Recharts SVG can consume them
 const C_THIS = "#3D52D5"; // brand-500

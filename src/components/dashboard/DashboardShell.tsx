@@ -52,7 +52,10 @@ export function DashboardShell() {
           {/* ── Right column ── */}
           <div className="flex flex-col gap-6">
             <ActivityFeed items={data?.activities} />
-            <Tasks initialTasks={data?.tasks} />
+            <Tasks
+              key={data?.tasks?.map((t) => t.id).join(",") ?? ""}
+              initialTasks={data?.tasks}
+            />
           </div>
 
         </div>

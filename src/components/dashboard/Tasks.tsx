@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -89,11 +89,6 @@ const IconPlus = () => (
 
 export function Tasks({ initialTasks }: { initialTasks?: Task[] }) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks ?? INITIAL_TASKS);
-
-  // Re-initialise when the period changes and new tasks arrive from the API
-  useEffect(() => {
-    if (initialTasks) setTasks(initialTasks);
-  }, [initialTasks]);
 
   const toggle = (id: string) =>
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
