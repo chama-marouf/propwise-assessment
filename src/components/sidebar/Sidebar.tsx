@@ -214,20 +214,8 @@ export function Sidebar() {
   return (
     <aside className="flex h-screen w-56 shrink-0 flex-col border-r border-gray-200 bg-white">
 
-      {/* ── Logo ── */}
-      <div className="flex items-center gap-2.5 px-4 pb-3 pt-5">
-        {/* Propwise logomark */}
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-500">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-            <path d="M2 10.5V5L7 2l5 3v5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M5 14v-4h4v4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-        <span className="text-sm font-bold tracking-tight text-gray-900">propwise</span>
-      </div>
-
       {/* ── User Profile ── */}
-      <div className="mx-2 mb-2">
+      <div className="mx-2 mt-3 mb-2">
         <button
           type="button"
           className="group flex w-full items-center gap-2.5 rounded-xl px-2 py-2 text-left transition-colors duration-100 hover:bg-gray-50"
