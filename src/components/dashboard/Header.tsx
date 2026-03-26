@@ -1,5 +1,16 @@
-// ── shared micro-icon ─────────────────────────────────────────────────────────
+"use client";
+
+import { useState, useRef, useEffect, useCallback } from "react";
+
+// ── Icons ─────────────────────────────────────────────────────────────────────
+
 type SVG = { className?: string };
+
+const IconPlus = ({ className }: SVG) => (
+  <svg className={className} width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+    <path d="M7 2v10M2 7h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+  </svg>
+);
 
 const IconBell = ({ className }: SVG) => (
   <svg className={className} width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
@@ -8,65 +19,162 @@ const IconBell = ({ className }: SVG) => (
   </svg>
 );
 
-const IconPlus = ({ className }: SVG) => (
-  <svg className={className} width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-    <path d="M7 2v10M2 7h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+const IconCalendar = ({ className }: SVG) => (
+  <svg className={className} width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
+    <rect x="1" y="2.5" width="11" height="9.5" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+    <path d="M1 5.5h11" stroke="currentColor" strokeWidth="1.3" />
+    <path d="M4 1v2.5M9 1v2.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
   </svg>
 );
 
-const IconChevronRight = ({ className }: SVG) => (
-  <svg className={className} width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-    <path d="M4.5 3L7.5 6l-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+// ── Constants ─────────────────────────────────────────────────────────────────
 
-// ── component ─────────────────────────────────────────────────────────────────
+const DATE_TABS = [
+  "Today",
+  "This Week",
+  "This Month",
+  "This Quarter",
+  "This Year",
+  "Custom",
+] as const;
+
+type DateTab = (typeof DATE_TABS)[number];
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export function DashboardHeader() {
-  return (
-    <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      {/* Left: breadcrumb + title */}
-      <div className="flex flex-col gap-1">
-        {/* breadcrumb */}
-        <nav aria-label="breadcrumb" className="flex items-center gap-1 text-body-sm text-gray-400">
-          <span>Home</span>
-          <IconChevronRight />
-          <span className="text-gray-600">Dashboard</span>
-        </nav>
+  const [activeTab, setActiveTab]       = useState<DateTab>("This Month");
+  const [indicator, setIndicator]       = useState({ left: 0, width: 0 });
+  const [indicatorReady, setReady]      = useState(false);
 
-        <div className="flex items-baseline gap-3">
-          <h1 className="text-display-2 text-gray-900">Dashboard</h1>
-          <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-body-sm font-medium text-brand-600">
-            Q2 2026
-          </span>
+  const tabsWrapRef = useRef<HTMLDivElement>(null);
+  const btnRefs     = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // Measure the active tab button and position the sliding pill
+  const syncIndicator = useCallback((tab: DateTab) => {
+    const idx       = DATE_TABS.indexOf(tab);
+    const btn       = btnRefs.current[idx];
+    const container = tabsWrapRef.current;
+    if (!btn || !container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const btnRect       = btn.getBoundingClientRect();
+
+    setIndicator({
+      left:  btnRect.left - containerRect.left + container.scrollLeft,
+      width: btnRect.width,
+    });
+    setReady(true);
+  }, []);
+
+  // Run on mount + whenever activeTab changes
+  useEffect(() => {
+    syncIndicator(activeTab);
+  }, [activeTab, syncIndicator]);
+
+  // Re-measure on window resize so the indicator doesn't drift
+  useEffect(() => {
+    const onResize = () => syncIndicator(activeTab);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [activeTab, syncIndicator]);
+
+  const handleTab = (tab: DateTab) => {
+    setActiveTab(tab);
+    // Scroll the tab into view on mobile
+    const idx = DATE_TABS.indexOf(tab);
+    btnRefs.current[idx]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  };
+
+  return (
+    <header className="flex flex-col gap-0 border-b border-gray-200 bg-white">
+
+      {/* ── Top row: title + actions ── */}
+      <div className="flex items-start justify-between gap-4 px-6 pb-4 pt-5">
+
+        {/* Left: title block */}
+        <div className="flex flex-col gap-0.5">
+          <p className="text-body-sm text-gray-400">
+            Friday, 28 March 2026 · Atlas Estates
+          </p>
+          <h1 className="text-display-2 text-gray-900 leading-tight">
+            Dashboard
+          </h1>
+          <p className="text-body-sm text-gray-400 mt-0.5">
+            Overview of your pipeline, revenue and team activity
+          </p>
         </div>
 
-        <p className="text-body-sm text-gray-400">
-          Friday, 28 March 2026 &nbsp;·&nbsp; Atlas Estates
-        </p>
+        {/* Right: actions */}
+        <div className="flex shrink-0 items-center gap-2 pt-1">
+          {/* Bell */}
+          <button
+            type="button"
+            aria-label="Notifications"
+            className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 shadow-xs transition-colors hover:bg-gray-50 hover:text-gray-700"
+          >
+            <IconBell />
+            <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
+          </button>
+
+          {/* Create */}
+          <button
+            type="button"
+            className="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3.5 py-2 text-body font-semibold text-white shadow-xs transition-all hover:bg-brand-600 active:scale-95"
+          >
+            <IconPlus />
+            Create
+          </button>
+        </div>
       </div>
 
-      {/* Right: actions */}
-      <div className="flex items-center gap-2">
-        {/* Notification bell */}
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 shadow-xs transition-colors hover:bg-gray-50 hover:text-gray-700"
-        >
-          <IconBell />
-          {/* unread dot */}
-          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
-        </button>
+      {/* ── Date filter tabs ── */}
+      <div
+        ref={tabsWrapRef}
+        role="tablist"
+        aria-label="Date range filter"
+        className="relative flex gap-0 overflow-x-auto px-6 scrollbar-none"
+        // hide scrollbar cross-browser
+        style={{ scrollbarWidth: "none" }}
+      >
+        {DATE_TABS.map((tab, i) => {
+          const isActive = tab === activeTab;
+          return (
+            <button
+              key={tab}
+              ref={(el) => { btnRefs.current[i] = el; }}
+              role="tab"
+              type="button"
+              aria-selected={isActive}
+              onClick={() => handleTab(tab)}
+              className={[
+                "relative flex shrink-0 items-center gap-1.5 whitespace-nowrap px-3.5 py-3 text-body font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400",
+                isActive ? "text-brand-600" : "text-gray-500 hover:text-gray-700",
+                // Custom tab gets a calendar icon treatment
+              ].join(" ")}
+            >
+              {tab === "Custom" && <IconCalendar className="opacity-70" />}
+              {tab}
+            </button>
+          );
+        })}
 
-        {/* Primary CTA */}
-        <button
-          type="button"
-          className="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3.5 py-2 text-body font-semibold text-white shadow-xs transition-colors hover:bg-brand-600 active:scale-95"
-        >
-          <IconPlus />
-          New Deal
-        </button>
+        {/* ── Sliding indicator ── */}
+        <span
+          aria-hidden
+          className={[
+            "pointer-events-none absolute bottom-0 h-0.5 rounded-full bg-brand-500",
+            "transition-[left,width] duration-200 ease-out",
+            indicatorReady ? "opacity-100" : "opacity-0",
+          ].join(" ")}
+          style={{ left: indicator.left, width: indicator.width }}
+        />
+
+        {/* ── Bottom baseline ── */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-gray-200"
+        />
       </div>
     </header>
   );

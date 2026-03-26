@@ -8,15 +8,21 @@ import { Tasks }          from "./Tasks";
 export function DashboardShell() {
   return (
     /*
-     * Scrollable content area (sidebar is fixed aside in parent).
-     * p-6 = 24px all sides; gap-6 = 24px between every section.
+     * Outer shell: flex column, fills remaining viewport height, scrollable.
+     * The Header is full-bleed (owns its own px-6 + border-b).
+     * Everything below gets p-6 / gap-6 via the inner content div.
      */
-    <div className="flex flex-1 flex-col gap-6 overflow-y-auto p-6">
-      {/* ── Header ── */}
-      <DashboardHeader />
+    <div className="flex flex-1 flex-col overflow-y-auto">
+      {/* ── Header (full-bleed, sticky) ── */}
+      <div className="sticky top-0 z-10 bg-white">
+        <DashboardHeader />
+      </div>
 
-      {/* ── KPI Cards row ── */}
-      <KpiCards />
+      {/* ── Scrollable content ── */}
+      <div className="flex flex-col gap-6 p-6">
+
+        {/* ── KPI Cards row ── */}
+        <KpiCards />
 
       {/*
        * ── Main grid ──────────────────────────────────────────────────────
@@ -25,20 +31,21 @@ export function DashboardShell() {
        *            right = 1.2fr (activity + tasks)
        * ─────────────────────────────────────────────────────────────────
        */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_1.2fr]">
 
-        {/* ── Left column ── */}
-        <div className="flex flex-col gap-6">
-          <RevenueChart />
-          <Pipeline />
+          {/* ── Left column ── */}
+          <div className="flex flex-col gap-6">
+            <RevenueChart />
+            <Pipeline />
+          </div>
+
+          {/* ── Right column ── */}
+          <div className="flex flex-col gap-6">
+            <ActivityFeed />
+            <Tasks />
+          </div>
+
         </div>
-
-        {/* ── Right column ── */}
-        <div className="flex flex-col gap-6">
-          <ActivityFeed />
-          <Tasks />
-        </div>
-
       </div>
     </div>
   );

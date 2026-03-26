@@ -1,11 +1,5 @@
-import { Sidebar }        from "@/components/sidebar";
-import { DashboardShell } from "@/components/dashboard";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 font-sans">
-      <Sidebar />
-      <DashboardShell />
-    </div>
-  );
+  redirect("/dashboard");
 }
