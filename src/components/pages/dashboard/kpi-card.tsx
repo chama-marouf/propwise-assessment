@@ -19,20 +19,28 @@ const trendConfig: Record<TrendDirection, { Icon: (p: SVG) => React.ReactElement
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
-export type KpiCardProps = KpiData;
+export type KpiCardProps = KpiData & { index?: number };
 
 // ── Component ───────────────────────────────────────────────────────────────
 
-export function KpiCard({ label, value, trend, trendDirection, sparklineData }: KpiCardProps) {
+export function KpiCard({ label, value, trend, trendDirection, sparklineData, index = 0 }: KpiCardProps) {
   const t = trendConfig[trendDirection];
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3.5 shadow-card dark:border-stone-700 dark:bg-stone-900">
+    <div
+      className="animate-fade-in flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3.5 shadow-card dark:border-stone-700 dark:bg-stone-900"
+      style={{ animationDelay: `${index * 80}ms`, animationFillMode: "both" }}
+    >
 
       {/* Left: label + value */}
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <p className="text-body-sm text-gray-400 dark:text-stone-500">{label}</p>
-        <p className="text-xl font-bold leading-tight text-gray-900 dark:text-stone-50">{value}</p>
+        <p
+          className="animate-count-up text-xl font-bold leading-tight text-gray-900 dark:text-stone-50"
+          style={{ animationDelay: `${index * 80 + 150}ms`, animationFillMode: "both" }}
+        >
+          {value}
+        </p>
       </div>
 
       {/* Right: sparkline + trend */}

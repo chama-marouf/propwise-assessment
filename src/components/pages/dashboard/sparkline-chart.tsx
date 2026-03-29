@@ -55,7 +55,9 @@ export function SparklineChart({ data, trendDirection }: SparklineChartProps) {
             fill={`url(#${c.gradientId})`}
             dot={false}
             activeDot={{ r: 3, fill: c.stroke, strokeWidth: 0 }}
-            isAnimationActive={false}
+            isAnimationActive={true}
+            animationDuration={800}
+            animationEasing="ease-out"
           />
         </AreaChart>
       </ResponsiveContainer>

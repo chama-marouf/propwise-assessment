@@ -143,7 +143,9 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
               fill="url(#rev-grad-last)"
               dot={false}
               activeDot={{ r: 4, fill: C_LAST, strokeWidth: 0 }}
-              isAnimationActive={false}
+              isAnimationActive={true}
+              animationDuration={1200}
+              animationEasing="ease-out"
             />
             <Area
               type="monotone"
@@ -154,7 +156,9 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
               fill="url(#rev-grad-this)"
               dot={false}
               activeDot={{ r: 4, fill: C_THIS, strokeWidth: 0 }}
-              isAnimationActive={false}
+              isAnimationActive={true}
+              animationDuration={1400}
+              animationEasing="ease-out"
             />
           </AreaChart>
         </ResponsiveContainer>
