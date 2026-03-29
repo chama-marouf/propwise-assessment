@@ -1,6 +1,7 @@
 "use client";
 
 import type { KpiData, TrendDirection } from "@/types/dashboard";
+import { useCountUp } from "@/hooks/use-count-up";
 import { SparklineChart } from "./sparkline-chart";
 
 // ── Icons ──────────────────────────────────────────────────────────────────
@@ -25,6 +26,13 @@ export type KpiCardProps = KpiData & { index?: number };
 
 export function KpiCard({ label, value, trend, trendDirection, sparklineData, index = 0 }: KpiCardProps) {
   const t = trendConfig[trendDirection];
+  // Stagger delay: card entrance (index * 80ms) + extra 150ms so the count-up
+  // starts after the card has faded in.
+  const animatedValue = useCountUp({
+    value,
+    duration: 900 + index * 80, // slight per-card variation: 900ms → ~1180ms
+    delay:    index * 80 + 150,
+  });
 
   return (
     <div
@@ -39,7 +47,7 @@ export function KpiCard({ label, value, trend, trendDirection, sparklineData, in
           className="animate-count-up text-2xl font-bold leading-tight text-gray-900 dark:text-stone-50"
           style={{ animationDelay: `${index * 80 + 150}ms`, animationFillMode: "both" }}
         >
-          {value}
+          {animatedValue}
         </p>
       </div>
 
