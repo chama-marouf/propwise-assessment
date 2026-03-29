@@ -180,19 +180,7 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
         </ResponsiveContainer>
       </div>
 
-      {/* Summary strip */}
-      <div className="grid grid-cols-3 gap-3 border-t border-gray-100 pt-4 dark:border-stone-800">
-        {[
-          { label: "This Year", val: `$${(TOTAL_THIS / 10).toFixed(1)}M`, color: "text-gray-900 dark:text-stone-50"  },
-          { label: "Last Year", val: `$${(TOTAL_LAST / 10).toFixed(1)}M`, color: "text-gray-400 dark:text-stone-500"  },
-          { label: "Growth",    val: `+${GROWTH_PCT}%`,                   color: "text-green-600 dark:text-green-400" },
-        ].map((s) => (
-          <div key={s.label} className="flex flex-col gap-0.5">
-            <p className={`text-body font-semibold ${s.color}`}>{s.val}</p>
-            <p className="text-caption text-gray-400 dark:text-stone-500">{s.label}</p>
-          </div>
-        ))}
-      </div>
+     
     </div>
   );
 }
