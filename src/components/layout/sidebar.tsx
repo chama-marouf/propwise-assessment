@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAtom } from "jotai";
 import { sidebarOpenAtom } from "@/store";
+import { useToast } from "@/hooks/use-toast";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -101,6 +102,15 @@ function NavLink({ item, isActive, onClick }: { item: NavItem; isActive: boolean
 export function Sidebar() {
   const [activeId, setActiveId] = useState("dashboard");
   const [open, setOpen]         = useAtom(sidebarOpenAtom);
+  const { neutral }             = useToast();
+
+  const handleNavClick = (id: string) => {
+    if (id === "dashboard") {
+      setActiveId(id);
+    } else {
+      neutral("Feature coming soon");
+    }
+  };
 
   return (
     <>
@@ -210,7 +220,7 @@ export function Sidebar() {
                   <p className="mb-1 px-2.5 text-caption font-semibold uppercase tracking-widest text-gray-400 dark:text-stone-600">{section.label}</p>
                 )}
                 {section.items.map((item) => (
-                  <NavLink key={item.id} item={item} isActive={activeId === item.id} onClick={() => setActiveId(item.id)} />
+                  <NavLink key={item.id} item={item} isActive={activeId === item.id} onClick={() => handleNavClick(item.id)} />
                 ))}
               </div>
             ))}
@@ -221,7 +231,7 @@ export function Sidebar() {
         <div className="border-t border-gray-100 px-3 py-3 dark:border-stone-800">
           <div className="flex flex-col gap-0.5">
             {BOTTOM_NAV.map((item) => (
-              <NavLink key={item.id} item={item} isActive={activeId === item.id} onClick={() => setActiveId(item.id)} />
+              <NavLink key={item.id} item={item} isActive={activeId === item.id} onClick={() => handleNavClick(item.id)} />
             ))}
           </div>
         </div>

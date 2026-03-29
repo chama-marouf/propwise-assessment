@@ -2,7 +2,7 @@
 
 import { useAtom } from "jotai";
 import { useTheme } from "next-themes";
-import { sidebarOpenAtom, periodAtom } from "@/store";
+import { sidebarOpenAtom } from "@/store";
 import { useToast } from "@/hooks/use-toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { DateFilterTabs } from "./date-filter-tabs";
@@ -46,9 +46,8 @@ const IconMoon = ({ className }: SVG) => (
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function DashboardHeader() {
-  const [, setSidebarOpen]                = useAtom(sidebarOpenAtom);
-  const [activeTab]                       = useAtom(periodAtom);
-  const { success, error, info, neutral } = useToast();
+  const [, setSidebarOpen] = useAtom(sidebarOpenAtom);
+  const { neutral }         = useToast();
   const { theme, setTheme }               = useTheme();
 
   const isDark = theme === "dark";
@@ -106,23 +105,10 @@ export function DashboardHeader() {
             <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
           </button>
 
-          {/* Create — fires demo toasts */}
+          {/* Create */}
           <button
             type="button"
-            onClick={() => {
-              success("Deal closed successfully", {
-                action: { label: "View deal", onClick: () => {}, icon: "retry" },
-              });
-              setTimeout(() => neutral("Draft saved automatically"), 400);
-              setTimeout(() => info(`Showing data for ${activeTab}`), 800);
-              setTimeout(
-                () =>
-                  error("Sync failed. Could not reach server", {
-                    action: { label: "Retry", onClick: () => success("Synced!"), icon: "retry" },
-                  }),
-                1200,
-              );
-            }}
+            onClick={() => neutral("Feature coming soon")}
             className="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3.5 py-2 text-body font-semibold text-white shadow-xs transition-all hover:bg-brand-600 active:scale-95"
           >
             <IconPlus />
