@@ -40,11 +40,11 @@ export function TaskItem({ task, onToggle }: TaskItemProps) {
 
   return (
     <li className={["group border-b border-gray-100 last:border-0 dark:border-stone-800", task.done ? "opacity-60" : "", due.rowBg].join(" ")}>
-      <button type="button" onClick={() => onToggle(task.id)} className="flex w-full items-start gap-3 px-5 py-3 text-left">
+      <button type="button" onClick={() => onToggle(task.id)} className="flex w-full items-center gap-3 px-5 py-3 text-left">
 
-        {/* Checkbox */}
+        {/* Circular checkbox */}
         <span className={[
-          "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors duration-100",
+          "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-100",
           task.done
             ? "border-brand-500 bg-brand-500"
             : task.dueState === "overdue"
@@ -52,26 +52,28 @@ export function TaskItem({ task, onToggle }: TaskItemProps) {
               : "border-gray-300 group-hover:border-brand-400",
         ].join(" ")}>
           {task.done && (
-            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden>
+            <svg width="7" height="7" viewBox="0 0 8 8" fill="none" aria-hidden>
               <path d="M1.5 4l2 2 3-3" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           )}
         </span>
 
-        {/* Label + badges */}
+        {/* Label + due + type */}
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <span className={["text-body-sm leading-snug", task.done ? "line-through text-gray-400 dark:text-stone-600" : "text-gray-800 dark:text-stone-200"].join(" ")}>
             {task.label}
           </span>
           <div className="flex items-center gap-1.5">
+            <span className={["text-caption", task.done ? "text-gray-300" : due.text].join(" ")}>
+              &#x23F0; {task.due}
+            </span>
             <span className={`rounded-full px-1.5 py-0.5 text-caption font-semibold leading-none ${typ.badge}`}>{typ.label}</span>
-            <span className={`rounded-full px-1.5 py-0.5 text-caption font-semibold leading-none ${pri.badge}`}>{pri.label}</span>
           </div>
         </div>
 
-        {/* Due date */}
-        <span className={["shrink-0 text-caption", task.done ? "text-gray-300" : due.text].join(" ")}>
-          {task.due}
+        {/* Priority badge */}
+        <span className={`shrink-0 rounded-full px-2 py-0.5 text-caption font-semibold leading-none ${pri.badge}`}>
+          {pri.label}
         </span>
       </button>
     </li>

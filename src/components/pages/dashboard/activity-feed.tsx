@@ -26,18 +26,7 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
     <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-card dark:border-stone-700 dark:bg-stone-900">
 
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-0.5">
-          <h2 className="text-body font-semibold text-gray-900 dark:text-stone-50">Activity</h2>
-          <p className="text-body-sm text-gray-400 dark:text-stone-500">Team updates</p>
-        </div>
-        <button
-          type="button"
-          className="text-body-sm font-medium text-brand-500 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
-        >
-          View all
-        </button>
-      </div>
+      <h2 className="text-body font-semibold text-gray-900 dark:text-stone-50">Activity Feed</h2>
 
       {/* Timeline groups */}
       <div className="flex flex-col gap-5">
@@ -63,6 +52,19 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
             </ul>
           </div>
         ))}
+      </div>
+
+      {/* Footer link */}
+      <div className="border-t border-gray-100 pt-3 dark:border-stone-800">
+        <button
+          type="button"
+          className="flex items-center gap-1 text-body-sm font-medium text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400"
+        >
+          View full activity log
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden>
+            <path d="M2 10L10 2M10 2H5.5M10 2v4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
       </div>
     </div>
   );

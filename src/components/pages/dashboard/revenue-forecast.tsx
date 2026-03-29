@@ -57,12 +57,25 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
   return (
     <div className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5 shadow-card dark:border-stone-700 dark:bg-stone-900">
 
-      {/* Header */}
+      {/* Header row: label + Report link */}
+      <div className="flex items-center justify-between">
+        <p className="text-body-sm text-gray-400 dark:text-stone-500">Revenue Forecast</p>
+        <button
+          type="button"
+          className="flex items-center gap-1 text-body-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400"
+        >
+          Report
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden>
+            <path d="M2 10L10 2M10 2H5.5M10 2v4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Value + growth + legend */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-0.5">
-          <p className="text-body-sm text-gray-400 dark:text-stone-500">Revenue Forecast</p>
           <div className="flex items-baseline gap-2">
-            <span className="text-display-2 text-gray-900 dark:text-stone-50">
+            <span className="text-display-2 font-bold text-gray-900 dark:text-stone-50">
               ${(TOTAL_THIS / 10).toFixed(1)}M
             </span>
             <span className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-body-sm font-semibold text-green-600 dark:bg-green-950 dark:text-green-400">
@@ -72,17 +85,19 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
               </svg>
               +{GROWTH_PCT}%
             </span>
+            <span className="text-body-sm text-gray-400 dark:text-stone-500">vs last year</span>
           </div>
-          <p className="text-body-sm text-gray-400 dark:text-stone-500">Jan – Dec 2026</p>
         </div>
         <div className="flex items-center gap-4 pt-1 text-body-sm text-gray-500 dark:text-stone-400">
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-5 rounded-full" style={{ background: C_THIS }} />
-            This Year
+            <span className="inline-block h-0.5 w-5" style={{ background: C_THIS }} />
+            This year
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2.5 w-5 rounded-full" style={{ background: C_LAST }} />
-            Last Year
+            <svg width="20" height="4" viewBox="0 0 20 4" aria-hidden>
+              <line x1="0" y1="2" x2="20" y2="2" stroke={C_LAST} strokeWidth="2" strokeDasharray="4 2.5" />
+            </svg>
+            Last year
           </span>
         </div>
       </div>

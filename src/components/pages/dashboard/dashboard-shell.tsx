@@ -18,7 +18,7 @@ export function DashboardShell() {
     <div className="flex flex-1 flex-col overflow-y-auto min-w-0">
 
       {/* Header — sticky */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-stone-950">
+      <div className="sticky top-0 z-10 rounded-t-2xl bg-white dark:bg-stone-900">
         <DashboardHeader />
       </div>
 
@@ -40,7 +40,7 @@ export function DashboardShell() {
          *  Mobile  : single column
          *  Desktop : left 3fr (revenue + pipeline) · right 1.2fr (activity + tasks)
          */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr]">
 
           {/* Left */}
           <div className="flex flex-col gap-6">

@@ -36,7 +36,7 @@ export function TasksPanel({ initialTasks }: TasksPanelProps) {
       {/* Header */}
       <div className="flex items-start justify-between px-5 pb-3 pt-5">
         <div className="flex flex-col gap-0.5">
-          <h2 className="text-body font-semibold text-gray-900 dark:text-stone-50">Tasks</h2>
+          <h2 className="text-body font-semibold text-gray-900 dark:text-stone-50">Tasks &amp; Reminders</h2>
           <p className="text-body-sm text-gray-400 dark:text-stone-500">
             {total - done} remaining
             {overdue > 0 && (
@@ -48,24 +48,20 @@ export function TasksPanel({ initialTasks }: TasksPanelProps) {
         </div>
         <button
           type="button"
-          className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-body-sm font-medium text-gray-600 shadow-xs transition-colors hover:bg-gray-50 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700"
+          className="flex items-center gap-1 text-body-sm font-medium text-brand-600 transition-colors hover:text-brand-700 dark:text-brand-400"
         >
-          <IconPlus /> Add
+          <IconPlus /> Quick add
         </button>
       </div>
 
       {/* Progress bar */}
       <div className="px-5 pb-3">
-        <div className="mb-1.5 flex items-center justify-between text-caption text-gray-400 dark:text-stone-500">
-          <span>{done}/{total} completed</span>
-          <span className={pct === 100 ? "font-semibold text-green-600" : ""}>{pct}%</span>
+        <div className="mb-1.5 flex items-center justify-between text-caption">
+          <span className="text-gray-400 dark:text-stone-500">{done}/{total} done</span>
         </div>
         <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-stone-800">
           <div
-            className={[
-              "h-full rounded-full transition-all duration-500",
-              pct === 100 ? "bg-green-500" : "bg-brand-500",
-            ].join(" ")}
+            className="h-full rounded-full bg-green-500 transition-all duration-500"
             style={{ width: `${pct}%` }}
           />
         </div>

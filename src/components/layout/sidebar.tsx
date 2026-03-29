@@ -110,8 +110,8 @@ export function Sidebar() {
       )}
 
       <aside className={[
-        "flex h-screen w-56 shrink-0 flex-col border-r border-gray-200 bg-white",
-        "dark:border-stone-800 dark:bg-stone-950",
+        "flex h-screen w-56 shrink-0 flex-col",
+        "dark:bg-stone-950",
         "fixed inset-y-0 left-0 z-30 transition-transform duration-300 ease-out",
         open ? "translate-x-0" : "-translate-x-full",
         "lg:relative lg:translate-x-0 lg:z-auto",

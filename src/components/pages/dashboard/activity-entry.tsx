@@ -36,32 +36,23 @@ export function ActivityEntry({ item, isLast }: ActivityEntryProps) {
   const cfg = typeConfig[item.type];
 
   return (
-    <li className="relative flex gap-3">
+    <li className="relative flex gap-3 pb-4">
       {!isLast && (
-        <span aria-hidden className="absolute left-3.25 top-7 w-px bg-gray-100" style={{ bottom: "-12px" }} />
+        <span aria-hidden className="absolute left-4 top-8 w-px bg-gray-100 dark:bg-stone-800" style={{ bottom: 0 }} />
       )}
 
-      <div className="relative flex shrink-0 flex-col items-center">
-        <div className={`flex h-7 w-7 items-center justify-center rounded-full ring-2 ring-white ${cfg.iconBg} ${cfg.iconColor}`}>
-          <cfg.Icon />
-        </div>
-        <div className={`absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-bold text-white ring-1 ring-white ${item.avatarColor}`} title={item.actor}>
-          {item.initials[0]}
-        </div>
+      {/* Neutral gray circle icon */}
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-500 dark:bg-stone-800 dark:text-stone-400">
+        <cfg.Icon />
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5 pb-4">
-        <p className="text-body-sm leading-snug text-gray-700">
-          <span className="font-semibold text-gray-900">{item.actor}</span>{" "}
+      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <p className="text-body-sm leading-snug text-gray-700 dark:text-stone-300">
+          <span className="font-semibold text-gray-900 dark:text-stone-100">{item.actor}</span>{" "}
           {item.action}{" "}
-          <span className="font-medium text-gray-900">{item.subject}</span>
+          <span className="font-medium text-brand-600 dark:text-brand-400">{item.subject}</span>
         </p>
-        <div className="flex items-center gap-1.5">
-          <span className={`rounded-full px-1.5 py-0.5 text-caption font-semibold leading-none ${cfg.tagBg} ${cfg.tagColor}`}>
-            {cfg.tagLabel}
-          </span>
-          <span className="text-caption text-gray-400">{item.timestamp}</span>
-        </div>
+        <span className="text-caption text-gray-400 dark:text-stone-500">{item.timestamp}</span>
       </div>
     </li>
   );
