@@ -166,13 +166,13 @@ function NavLink({ item, isActive, onClick }: { item: NavItem; isActive: boolean
       aria-current={isActive ? "page" : undefined}
       className={[
         "group flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm font-medium transition-colors duration-100",
-        isActive ? "bg-brand-50 text-brand-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+        isActive ? "bg-brand-50 text-brand-700" : "text-stone-500 hover:bg-gray-50 hover:text-stone-700",
       ].join(" ")}
     >
-      <item.Icon className={["shrink-0 transition-colors duration-100", isActive ? "text-brand-500" : "text-gray-400 group-hover:text-gray-600"].join(" ")} />
+      <item.Icon className={["shrink-0 transition-colors duration-100", isActive ? "text-brand-700" : "text-stone-500 group-hover:text-stone-700"].join(" ")} />
       <span className="flex-1 truncate">{item.label}</span>
       {item.badge !== undefined && (
-        <span className={["rounded-full px-1.5 py-0.5 text-caption font-semibold leading-none", isActive ? "bg-brand-100 text-brand-600" : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"].join(" ")}>
+        <span className={["rounded-full px-1.5 py-0.5 text-caption font-semibold leading-none", isActive ? "bg-brand-100 text-brand-700" : "bg-gray-100 text-stone-500 group-hover:bg-gray-200"].join(" ")}>
           {item.badge}
         </span>
       )}
