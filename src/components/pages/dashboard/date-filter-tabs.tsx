@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAtom } from "jotai";
 import { periodAtom } from "@/store";
 import type { DatePeriod } from "@/types/dashboard";
@@ -16,10 +18,41 @@ const DATE_TABS: DatePeriod[] = [
   "Custom",
 ];
 
+// ── Slug helpers ───────────────────────────────────────────────────────────────
+
+const toSlug   = (p: DatePeriod) => p.toLowerCase().replace(/\s+/g, "-");
+const fromSlug = (s: string): DatePeriod | null =>
+  DATE_TABS.find((t) => toSlug(t) === s.toLowerCase()) ?? null;
+
 // ── Component ──────────────────────────────────────────────────────────────────
 
 export function DateFilterTabs() {
   const [activeTab, setActiveTab] = useAtom(periodAtom);
+  const router       = useRouter();
+  const searchParams = useSearchParams();
+
+  // Seed atom from URL on first render, or set default URL if no param
+  useEffect(() => {
+    const slug = searchParams.get("period");
+    if (slug) {
+      const period = fromSlug(slug);
+      if (period && period !== activeTab) setActiveTab(period);
+    } else {
+      // No param in URL — write the current default so URL always reflects state
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("period", toSlug(activeTab));
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+  // Only run on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSelect = (tab: DatePeriod) => {
+    setActiveTab(tab);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("period", toSlug(tab));
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
 
   return (
     <div className="overflow-x-auto px-4 pb-3 pt-1 md:px-6" style={{ scrollbarWidth: "none" }}>
@@ -36,7 +69,7 @@ export function DateFilterTabs() {
               role="tab"
               type="button"
               aria-selected={isActive}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => handleSelect(tab)}
               className={[
                 "flex h-8.75 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-[6px] px-3.5 py-1.5 text-body font-medium transition-all duration-150",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400",
