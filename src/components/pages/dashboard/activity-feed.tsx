@@ -1,12 +1,15 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import type { ActivityItem, ActivityGroup } from "@/types/dashboard";
 import { ALL_ACTIVITIES } from "@/lib/mock-data";
+import { fetchNewActivity } from "@/lib/mock-api";
 import { ActivityEntry } from "./activity-entry";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const GROUP_ORDER: ActivityGroup[] = ["Just now", "Earlier today", "Yesterday"];
+const POLL_INTERVAL_MS = 12_000; // ~12 s (randomised ±3 s per tick)
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -15,11 +18,57 @@ interface ActivityFeedProps {
 }
 
 export function ActivityFeed({ items }: ActivityFeedProps) {
-  const activeItems = items ?? ALL_ACTIVITIES;
+  const seed = items ?? ALL_ACTIVITIES;
+
+  // Local list starts from seed; new items are prepended
+  const [list, setList] = useState<ActivityItem[]>(seed);
+  // Track which IDs were just added so we can animate them
+  const [newIds, setNewIds] = useState<Set<string>>(new Set());
+  const seenIds = useRef<Set<string>>(new Set(seed.map((i) => i.id)));
+
+  // Re-seed when parent data changes (e.g. period switch)
+  useEffect(() => {
+    setList(seed);
+    seenIds.current = new Set(seed.map((i) => i.id));
+    setNewIds(new Set());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items]);
+
+  // Polling
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const poll = async () => {
+      try {
+        const item = await fetchNewActivity();
+        if (!seenIds.current.has(item.id)) {
+          seenIds.current.add(item.id);
+          setList((prev) => [item, ...prev]);
+          setNewIds((prev) => new Set(prev).add(item.id));
+          // Remove from "new" set after animation completes (500 ms)
+          setTimeout(() => {
+            setNewIds((prev) => {
+              const next = new Set(prev);
+              next.delete(item.id);
+              return next;
+            });
+          }, 600);
+        }
+      } catch {
+        // silently ignore fetch errors in mock env
+      }
+      // Randomise next interval 9–15 s
+      const jitter = POLL_INTERVAL_MS + (Math.random() * 6_000 - 3_000);
+      timeoutId = setTimeout(poll, jitter);
+    };
+
+    timeoutId = setTimeout(poll, POLL_INTERVAL_MS);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const grouped = GROUP_ORDER.map((g) => ({
     group: g,
-    items: activeItems.filter((i) => i.group === g),
+    items: list.filter((i) => i.group === g),
   })).filter((g) => g.items.length > 0);
 
   return (
@@ -43,11 +92,15 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
             {/* Items */}
             <ul className="flex flex-col">
               {groupItems.map((item, idx) => (
-                <ActivityEntry
+                <li
                   key={item.id}
-                  item={item}
-                  isLast={idx === groupItems.length - 1}
-                />
+                  className={newIds.has(item.id) ? "animate-slide-in-new" : ""}
+                >
+                  <ActivityEntry
+                    item={item}
+                    isLast={idx === groupItems.length - 1}
+                  />
+                </li>
               ))}
             </ul>
           </div>

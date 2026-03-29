@@ -201,3 +201,32 @@ export async function fetchRevenue(period: DatePeriod):    Promise<RevenuePoint[
 export async function fetchPipeline(period: DatePeriod):   Promise<PipelineStage[]> { await delay(300); return buildPipeline(period);   }
 export async function fetchActivities(period: DatePeriod): Promise<ActivityItem[]>  { await delay(250); return buildActivities(period); }
 export async function fetchTasks(period: DatePeriod):      Promise<TaskItem[]>      { await delay(280); return buildTasks(period);      }
+
+// ── Real-time activity simulation ─────────────────────────────────────────────
+
+const LIVE_POOL: Omit<ActivityItem, "id" | "group" | "timestamp">[] = [
+  { actor: "Sara Al-Mansoori", initials: "SM", avatarColor: "bg-pink-500",   action: "requested a viewing of",   subject: "Downtown Loft 7C",            type: "meeting"  },
+  { actor: "Khalid Youssef",   initials: "KY", avatarColor: "bg-cyan-500",    action: "submitted an offer on",    subject: "Palm Residences Unit 12",     type: "deal"     },
+  { actor: "Nadia Chami",      initials: "NC", avatarColor: "bg-amber-500",   action: "added a note on",           subject: "Harbour View Tower",          type: "note"     },
+  { actor: "Rami Fares",       initials: "RF", avatarColor: "bg-teal-500",    action: "called",                   subject: "Ahmed Al-Sayed",              type: "contact"  },
+  { actor: "Lina Rahman",      initials: "LR", avatarColor: "bg-brand-500",   action: "updated listing price on", subject: "Skyline Penthouse",           type: "listing"  },
+  { actor: "Tariq Hassan",     initials: "TH", avatarColor: "bg-green-500",   action: "completed task",            subject: "Send Q2 market report",       type: "task"     },
+  { actor: "Omar Khalid",      initials: "OK", avatarColor: "bg-orange-400",  action: "moved to Offer stage",     subject: "Creek Horizon Suite",         type: "deal"     },
+  { actor: "Priya Nair",       initials: "PN", avatarColor: "bg-purple-500",  action: "scheduled a call with",    subject: "Marina Al-Farsi",             type: "meeting"  },
+  { actor: "Jad Haddad",       initials: "JH", avatarColor: "bg-red-400",     action: "closed a deal with",       subject: "Business Bay Tower B",        type: "deal"     },
+  { actor: "Hana Saleh",       initials: "HS", avatarColor: "bg-indigo-500",  action: "published listing",        subject: "JBR Beachfront Studio",       type: "listing"  },
+];
+
+let _liveCounter = 0;
+
+export async function fetchNewActivity(): Promise<ActivityItem> {
+  await delay(200);
+  const entry = LIVE_POOL[_liveCounter % LIVE_POOL.length];
+  _liveCounter++;
+  return {
+    ...entry,
+    id:        `live-${Date.now()}-${_liveCounter}`,
+    group:     "Just now",
+    timestamp: "Just now",
+  };
+}
