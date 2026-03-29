@@ -32,20 +32,20 @@ export function KpiCard({ label, value, trend, trendDirection, sparklineData, in
       style={{ animationDelay: `${index * 80}ms`, animationFillMode: "both" }}
     >
 
-      {/* Left: label + value */}
+      {/* Left: label / value */}
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <p className="text-body-sm text-gray-400 dark:text-stone-500">{label}</p>
         <p
-          className="animate-count-up text-xl font-bold leading-tight text-gray-900 dark:text-stone-50"
+          className="animate-count-up text-2xl font-bold leading-tight text-gray-900 dark:text-stone-50"
           style={{ animationDelay: `${index * 80 + 150}ms`, animationFillMode: "both" }}
         >
           {value}
         </p>
       </div>
 
-      {/* Right: sparkline + trend */}
-      <div className="flex shrink-0 flex-col items-end gap-1.5">
-        <div className="h-9 w-20">
+      {/* Right: sparkline + trend below */}
+      <div className="flex shrink-0 flex-col items-end gap-1">
+        <div className="h-10 w-24">
           <SparklineChart data={sparklineData} trendDirection={trendDirection} />
         </div>
         <span className={`flex items-center gap-0.5 text-body-sm font-semibold ${t.color}`}>

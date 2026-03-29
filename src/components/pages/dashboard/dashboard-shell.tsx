@@ -30,7 +30,7 @@ export function DashboardShell() {
       )}
 
       {/* Scrollable content */}
-      <div className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
+      <div className="flex flex-col gap-6.5 p-4 pt-6.5 md:p-6 md:pt-6.5">
 
         {/* KPI Cards */}
         <KpiCards data={data?.kpis} />
@@ -40,16 +40,16 @@ export function DashboardShell() {
          *  Mobile  : single column
          *  Desktop : left 3fr (revenue + pipeline) · right 1.2fr (activity + tasks)
          */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr]">
+        <div className="grid grid-cols-1 gap-6.5 lg:grid-cols-[3fr_2fr]">
 
           {/* Left */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6.5">
             <RevenueForecast data={data?.revenue} />
             <PipelineSummary data={data?.pipeline} />
           </div>
 
           {/* Right */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6.5">
             <ActivityFeed items={data?.activities} />
             <TasksPanel
               key={data?.tasks?.map((t) => t.id).join(",") ?? ""}

@@ -42,7 +42,7 @@ export function DateFilterTabs() {
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400",
                 isActive
                   ? "bg-white text-gray-900 shadow-xs dark:bg-stone-700 dark:text-stone-50"
-                  : "shadow-xs text-gray-500 hover:text-gray-700 dark:text-stone-500 dark:hover:text-stone-300",
+                  : "text-gray-500 hover:text-gray-700 dark:text-stone-500 dark:hover:text-stone-300",
               ].join(" ")}
             >
               {tab}

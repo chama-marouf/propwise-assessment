@@ -10,7 +10,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -179,7 +178,7 @@ export function Sidebar() {
                 </span>
               </div>
 
-              <DropdownMenuLabel>Account</DropdownMenuLabel>
+             
               <DropdownMenuItem>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden className="text-gray-400"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" strokeWidth="1.4" /><path d="M3 14c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
                 My Profile

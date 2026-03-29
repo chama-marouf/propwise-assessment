@@ -17,6 +17,22 @@ import { RevenueForecastSkeleton } from "./dashboard-skeleton";
 const C_THIS = "#3D52D5"; // brand-500
 const C_LAST = "#A5B4FC"; // brand-300
 
+// ── Animated active dot ──────────────────────────────────────────────────────
+
+function AnimatedDot({ cx, cy, fill }: { cx?: number; cy?: number; fill?: string }) {
+  if (cx === undefined || cy === undefined) return null;
+  return (
+    <g style={{
+      transform: `translate(${cx}px, ${cy}px)`,
+      transition: "transform 180ms cubic-bezier(0.16, 1, 0.3, 1)",
+    }}>
+      <circle cx={0} cy={0} r={7} fill={fill} opacity={0.15}
+        style={{ animation: "dot-ping 1s ease-out infinite" }} />
+      <circle cx={0} cy={0} r={4} fill={fill} />
+    </g>
+  );
+}
+
 // ── Custom tooltip ────────────────────────────────────────────────────────────
 
 function CustomTooltip({ active, payload, label }: {
@@ -142,7 +158,7 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
               strokeWidth={1.5}
               fill="url(#rev-grad-last)"
               dot={false}
-              activeDot={{ r: 4, fill: C_LAST, strokeWidth: 0 }}
+              activeDot={(props: { cx?: number; cy?: number }) => <AnimatedDot cx={props.cx} cy={props.cy} fill={C_LAST} />}
               isAnimationActive={true}
               animationDuration={1200}
               animationEasing="ease-out"
@@ -155,7 +171,7 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
               strokeWidth={2}
               fill="url(#rev-grad-this)"
               dot={false}
-              activeDot={{ r: 4, fill: C_THIS, strokeWidth: 0 }}
+              activeDot={(props: { cx?: number; cy?: number }) => <AnimatedDot cx={props.cx} cy={props.cy} fill={C_THIS} />}
               isAnimationActive={true}
               animationDuration={1400}
               animationEasing="ease-out"

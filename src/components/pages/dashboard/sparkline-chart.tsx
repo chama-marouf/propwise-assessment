@@ -22,6 +22,22 @@ function SparkTooltip({ active, payload }: { active?: boolean; payload?: Array<{
   );
 }
 
+// ── Animated active dot ──────────────────────────────────────────────────────
+
+function AnimatedDot({ cx, cy, fill }: { cx?: number; cy?: number; fill?: string }) {
+  if (cx === undefined || cy === undefined) return null;
+  return (
+    <g style={{
+      transform: `translate(${cx}px, ${cy}px)`,
+      transition: "transform 180ms cubic-bezier(0.16, 1, 0.3, 1)",
+    }}>
+      <circle cx={0} cy={0} r={5} fill={fill} opacity={0.2}
+        style={{ animation: "dot-ping 1s ease-out infinite" }} />
+      <circle cx={0} cy={0} r={3} fill={fill} />
+    </g>
+  );
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 interface SparklineChartProps {
@@ -54,7 +70,7 @@ export function SparklineChart({ data, trendDirection }: SparklineChartProps) {
             strokeWidth={1.5}
             fill={`url(#${c.gradientId})`}
             dot={false}
-            activeDot={{ r: 3, fill: c.stroke, strokeWidth: 0 }}
+            activeDot={(props: { cx?: number; cy?: number }) => <AnimatedDot cx={props.cx} cy={props.cy} fill={c.stroke} />}
             isAnimationActive={true}
             animationDuration={800}
             animationEasing="ease-out"
