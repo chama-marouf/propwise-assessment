@@ -219,6 +219,8 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
 
 // ── Toaster ───────────────────────────────────────────────────────────────────
 
+const MAX_VISIBLE = 3;
+
 export function Toaster() {
   const toasts    = useAtomValue(toastsAtom);
   const setToasts = useSetAtom(toastsAtom);
@@ -228,6 +230,10 @@ export function Toaster() {
     [setToasts],
   );
 
+  // Toasts are stored newest-first. Show the first MAX_VISIBLE; the rest are queued.
+  const visible    = toasts.slice(0, MAX_VISIBLE);
+  const queueCount = Math.max(0, toasts.length - MAX_VISIBLE);
+
   if (toasts.length === 0) return null;
 
   return (
@@ -235,11 +241,21 @@ export function Toaster() {
       aria-label="Notifications"
       className="pointer-events-none fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2"
     >
-      {toasts.map((t) => (
+      {/* Visible toasts — newest at top */}
+      {visible.map((t) => (
         <div key={t.id} className="pointer-events-auto">
           <ToastItem toast={t} onDismiss={dismiss} />
         </div>
       ))}
+
+      {/* Queue overflow badge */}
+      {queueCount > 0 && (
+        <div className="pointer-events-none flex justify-end">
+          <span className="rounded-full bg-gray-700/80 px-2.5 py-0.5 text-[11px] font-medium tabular-nums text-white/80 backdrop-blur-sm">
+            +{queueCount} more
+          </span>
+        </div>
+      )}
     </div>
   );
 }

@@ -25,7 +25,6 @@ export function useToast() {
     (title: string, opts: ToastOptions = {}): string => {
       const id = crypto.randomUUID();
       setToasts((prev) => [
-        ...prev,
         {
           id,
           type:     opts.type     ?? "neutral",
@@ -34,6 +33,7 @@ export function useToast() {
           duration: opts.duration ?? 4000,
           action:   opts.action,
         },
+        ...prev,
       ]);
       return id;
     },
