@@ -53,7 +53,7 @@ export function DashboardHeader() {
   const isDark = theme === "dark";
 
   return (
-    <header className="flex flex-col gap-0 border-b border-gray-200 bg-white dark:border-stone-800 dark:bg-stone-950">
+    <header className="flex flex-col gap-0 bg-white dark:bg-stone-950">
 
       {/* Top row: title + actions */}
       <div className="flex items-start justify-between gap-4 px-4 pb-4 pt-5 md:px-6">
@@ -109,7 +109,7 @@ export function DashboardHeader() {
           <button
             type="button"
             onClick={() => neutral("Feature coming soon")}
-            className="flex items-center gap-1.5 rounded-lg bg-brand-500 px-3.5 py-2 text-body font-semibold text-white shadow-xs transition-all hover:bg-brand-600 active:scale-95"
+            className="flex items-center gap-1.5 rounded-lg bg-brand-600 px-3.5 py-2 text-body font-semibold text-white shadow-xs transition-all hover:bg-brand-700 active:scale-95"
           >
             <IconPlus />
             Create

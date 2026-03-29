@@ -59,21 +59,18 @@ export function PipelineSummary({ data }: PipelineSummaryProps) {
             </span>
 
             {/* Bar track */}
-            <div className="relative h-11 flex-1 overflow-hidden rounded-lg">
+            <div className="relative h-7.5 flex-1 rounded-lg">
               <div className="absolute inset-0 rounded-lg bg-gray-100 dark:bg-stone-800" />
 
-              {/* Filled portion */}
+              {/* Filled portion — min-width ensures pill always fits inside */}
               <div
-                className="absolute inset-y-0 left-0 rounded-lg transition-[width] duration-500"
-                style={{ width: `${stage.pct}%`, backgroundColor: BAR_COLOR }}
+                className="absolute inset-y-0 left-0 flex items-center rounded-lg px-1 transition-[width] duration-500"
+                style={{ width: `${stage.pct}%`, minWidth: "fit-content", backgroundColor: BAR_COLOR }}
               >
-                <div className="flex h-full items-center px-0.75 py-0.75">
-                  {/* Single pill: count + value */}
-                  <span className="inline-flex items-center gap-2 rounded-md bg-white/15 px-3 py-1 text-xs text-white">
-                    <span className="font-bold">{stage.count}</span>
-                    <span className="font-normal text-white/70">{stage.value}</span>
-                  </span>
-                </div>
+                <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-md bg-white/15 px-3 py-1 text-xs text-white">
+                  <span className="font-bold">{stage.count}</span>
+                  <span className="font-normal text-white/70">{stage.value}</span>
+                </span>
               </div>
             </div>
           </div>
