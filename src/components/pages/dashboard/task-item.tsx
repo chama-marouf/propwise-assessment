@@ -39,7 +39,7 @@ export function TaskItem({ task, onToggle }: TaskItemProps) {
   const typ = typeConfig[task.type];
 
   return (
-    <li className={["group border-b border-gray-100 last:border-0", task.done ? "opacity-60" : "", due.rowBg].join(" ")}>
+    <li className={["group border-b border-gray-100 last:border-0 dark:border-stone-800", task.done ? "opacity-60" : "", due.rowBg].join(" ")}>
       <button type="button" onClick={() => onToggle(task.id)} className="flex w-full items-start gap-3 px-5 py-3 text-left">
 
         {/* Checkbox */}
@@ -60,7 +60,7 @@ export function TaskItem({ task, onToggle }: TaskItemProps) {
 
         {/* Label + badges */}
         <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className={["text-body-sm leading-snug", task.done ? "line-through text-gray-400" : "text-gray-800"].join(" ")}>
+          <span className={["text-body-sm leading-snug", task.done ? "line-through text-gray-400 dark:text-stone-600" : "text-gray-800 dark:text-stone-200"].join(" ")}>
             {task.label}
           </span>
           <div className="flex items-center gap-1.5">

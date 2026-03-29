@@ -11,6 +11,10 @@ It includes:
 - Tasks panel
 - Toast notification system
 
+## Live Demo
+
+[🔗 https://propwise-ssessment.vercel.app/dashboard]
+
 ## Tech Stack
 
 - Next.js 15 (App Router)
@@ -36,9 +40,7 @@ It includes:
 npm install
 npm run dev
 
-### 6. Project Structure
 
-```md
 ## Project Structure
 
 - app/dashboard → main page

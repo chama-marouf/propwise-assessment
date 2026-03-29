@@ -1,15 +1,14 @@
-interface SkeletonProps {
-  className?: string;
-  rounded?:   "sm" | "md" | "lg" | "full";
-}
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-const roundedMap = { sm: "rounded", md: "rounded-lg", lg: "rounded-xl", full: "rounded-full" };
-
-export function Skeleton({ className = "", rounded = "md" }: SkeletonProps) {
+function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       aria-hidden
-      className={["animate-pulse bg-gray-100", roundedMap[rounded], className].join(" ")}
+      className={cn("animate-pulse rounded-lg bg-gray-100 dark:bg-stone-800", className)}
+      {...props}
     />
   );
 }
+
+export { Skeleton };

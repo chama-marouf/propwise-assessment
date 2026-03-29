@@ -1,3 +1,11 @@
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+/** Merge & deduplicate Tailwind classes — powered by clsx + tailwind-merge. */
+export function cn(...inputs: ClassValue[]): string {
+  return twMerge(clsx(inputs));
+}
+
 /** Simulated network delay: 300–800 ms */
 export function delay(ms?: number): Promise<void> {
   const wait = ms ?? 300 + Math.random() * 500;
@@ -7,12 +15,4 @@ export function delay(ms?: number): Promise<void> {
 /** Scale a base integer value by a period multiplier */
 export function scale(base: number, multiplier: number): number {
   return Math.round(base * multiplier);
-}
-
-/**
- * Merge class names, filtering falsy values.
- * Lightweight alternative to clsx for simple use-cases.
- */
-export function cn(...classes: (string | undefined | false | null)[]): string {
-  return classes.filter(Boolean).join(" ");
 }

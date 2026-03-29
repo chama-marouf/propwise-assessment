@@ -26,15 +26,15 @@ function CustomTooltip({ active, payload, label }: {
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 shadow-dropdown">
-      <p className="mb-1.5 text-body-sm font-semibold text-gray-700">{label}</p>
+    <div className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 shadow-dropdown dark:border-stone-700 dark:bg-stone-900">
+      <p className="mb-1.5 text-body-sm font-semibold text-gray-700 dark:text-stone-200">{label}</p>
       {payload.map((p) => (
         <div key={p.name} className="flex items-center justify-between gap-4 text-body-sm">
-          <span className="flex items-center gap-1.5 text-gray-500">
+          <span className="flex items-center gap-1.5 text-gray-500 dark:text-stone-400">
             <span className="h-2 w-2 rounded-full" style={{ background: p.color }} />
             {p.name === "thisYear" ? "This Year" : "Last Year"}
           </span>
-          <span className="font-semibold text-gray-900">${p.value}k</span>
+          <span className="font-semibold text-gray-900 dark:text-stone-50">${p.value}k</span>
         </div>
       ))}
     </div>
@@ -55,17 +55,17 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
   const GROWTH_PCT = (((TOTAL_THIS - TOTAL_LAST) / TOTAL_LAST) * 100).toFixed(1);
 
   return (
-    <div className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5 shadow-card">
+    <div className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5 shadow-card dark:border-stone-700 dark:bg-stone-900">
 
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-0.5">
-          <p className="text-body-sm text-gray-400">Revenue Forecast</p>
+          <p className="text-body-sm text-gray-400 dark:text-stone-500">Revenue Forecast</p>
           <div className="flex items-baseline gap-2">
-            <span className="text-display-2 text-gray-900">
+            <span className="text-display-2 text-gray-900 dark:text-stone-50">
               ${(TOTAL_THIS / 10).toFixed(1)}M
             </span>
-            <span className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-body-sm font-semibold text-green-600">
+            <span className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-body-sm font-semibold text-green-600 dark:bg-green-950 dark:text-green-400">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
                 <path d="M2 8.5L5 5.5l2.5 2.5L11 3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M8 3.5h3v3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -73,9 +73,9 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
               +{GROWTH_PCT}%
             </span>
           </div>
-          <p className="text-body-sm text-gray-400">Jan – Dec 2026</p>
+          <p className="text-body-sm text-gray-400 dark:text-stone-500">Jan – Dec 2026</p>
         </div>
-        <div className="flex items-center gap-4 pt-1 text-body-sm text-gray-500">
+        <div className="flex items-center gap-4 pt-1 text-body-sm text-gray-500 dark:text-stone-400">
           <span className="flex items-center gap-1.5">
             <span className="h-2.5 w-5 rounded-full" style={{ background: C_THIS }} />
             This Year
@@ -146,15 +146,15 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
       </div>
 
       {/* Summary strip */}
-      <div className="grid grid-cols-3 gap-3 border-t border-gray-100 pt-4">
+      <div className="grid grid-cols-3 gap-3 border-t border-gray-100 pt-4 dark:border-stone-800">
         {[
-          { label: "This Year", val: `$${(TOTAL_THIS / 10).toFixed(1)}M`, color: "text-gray-900"  },
-          { label: "Last Year", val: `$${(TOTAL_LAST / 10).toFixed(1)}M`, color: "text-gray-400"  },
-          { label: "Growth",    val: `+${GROWTH_PCT}%`,                   color: "text-green-600" },
+          { label: "This Year", val: `$${(TOTAL_THIS / 10).toFixed(1)}M`, color: "text-gray-900 dark:text-stone-50"  },
+          { label: "Last Year", val: `$${(TOTAL_LAST / 10).toFixed(1)}M`, color: "text-gray-400 dark:text-stone-500"  },
+          { label: "Growth",    val: `+${GROWTH_PCT}%`,                   color: "text-green-600 dark:text-green-400" },
         ].map((s) => (
           <div key={s.label} className="flex flex-col gap-0.5">
             <p className={`text-body font-semibold ${s.color}`}>{s.val}</p>
-            <p className="text-caption text-gray-400">{s.label}</p>
+            <p className="text-caption text-gray-400 dark:text-stone-500">{s.label}</p>
           </div>
         ))}
       </div>

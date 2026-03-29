@@ -18,13 +18,13 @@ export function DashboardShell() {
     <div className="flex flex-1 flex-col overflow-y-auto min-w-0">
 
       {/* Header — sticky */}
-      <div className="sticky top-0 z-10 bg-white">
+      <div className="sticky top-0 z-10 bg-white dark:bg-stone-950">
         <DashboardHeader />
       </div>
 
       {/* Error banner */}
       {isError && (
-        <div className="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-body-sm text-red-600">
+        <div className="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-body-sm text-red-600 dark:border-red-900 dark:bg-red-950 dark:text-red-400">
           Failed to load dashboard data. Please try again.
         </div>
       )}

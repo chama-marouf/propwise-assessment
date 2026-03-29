@@ -38,7 +38,7 @@ export function DateFilterTabs() {
       <div
         role="tablist"
         aria-label="Date range filter"
-        className="flex w-fit min-w-full gap-0 rounded-sm bg-gray-100 p-1"
+        className="flex w-fit min-w-full gap-0 rounded-sm bg-gray-100 p-1 dark:bg-stone-800"
       >
         {DATE_TABS.map((tab) => {
           const isActive = tab === activeTab;
@@ -53,8 +53,8 @@ export function DateFilterTabs() {
                 "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-sm px-3.5 py-1.5 text-body font-medium transition-all duration-150",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400",
                 isActive
-                  ? "bg-white text-gray-900 shadow-xs"
-                  : "text-gray-500 hover:text-gray-700",
+                  ? "bg-white text-gray-900 shadow-xs dark:bg-stone-700 dark:text-stone-50"
+                  : "text-gray-500 hover:text-gray-700 dark:text-stone-500 dark:hover:text-stone-300",
               ].join(" ")}
             >
               {tab === "Custom" && <IconCalendar className="opacity-60" />}

@@ -31,16 +31,16 @@ export function TasksPanel({ initialTasks }: TasksPanelProps) {
   const pct     = total > 0 ? Math.round((done / total) * 100) : 0;
 
   return (
-    <div className="flex flex-col gap-0 rounded-xl border border-gray-200 bg-white shadow-card">
+    <div className="flex flex-col gap-0 rounded-xl border border-gray-200 bg-white shadow-card dark:border-stone-700 dark:bg-stone-900">
 
       {/* Header */}
       <div className="flex items-start justify-between px-5 pb-3 pt-5">
         <div className="flex flex-col gap-0.5">
-          <h2 className="text-body font-semibold text-gray-900">Tasks</h2>
-          <p className="text-body-sm text-gray-400">
+          <h2 className="text-body font-semibold text-gray-900 dark:text-stone-50">Tasks</h2>
+          <p className="text-body-sm text-gray-400 dark:text-stone-500">
             {total - done} remaining
             {overdue > 0 && (
-              <span className="ml-1.5 rounded-full bg-red-50 px-1.5 py-0.5 text-caption font-semibold text-red-500">
+              <span className="ml-1.5 rounded-full bg-red-50 px-1.5 py-0.5 text-caption font-semibold text-red-500 dark:bg-red-950 dark:text-red-400">
                 {overdue} overdue
               </span>
             )}
@@ -48,7 +48,7 @@ export function TasksPanel({ initialTasks }: TasksPanelProps) {
         </div>
         <button
           type="button"
-          className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-body-sm font-medium text-gray-600 shadow-xs transition-colors hover:bg-gray-50"
+          className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-body-sm font-medium text-gray-600 shadow-xs transition-colors hover:bg-gray-50 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700"
         >
           <IconPlus /> Add
         </button>
@@ -56,11 +56,11 @@ export function TasksPanel({ initialTasks }: TasksPanelProps) {
 
       {/* Progress bar */}
       <div className="px-5 pb-3">
-        <div className="mb-1.5 flex items-center justify-between text-caption text-gray-400">
+        <div className="mb-1.5 flex items-center justify-between text-caption text-gray-400 dark:text-stone-500">
           <span>{done}/{total} completed</span>
           <span className={pct === 100 ? "font-semibold text-green-600" : ""}>{pct}%</span>
         </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-stone-800">
           <div
             className={[
               "h-full rounded-full transition-all duration-500",
@@ -72,7 +72,7 @@ export function TasksPanel({ initialTasks }: TasksPanelProps) {
       </div>
 
       {/* Task list */}
-      <ul className="flex flex-col border-t border-gray-100">
+      <ul className="flex flex-col border-t border-gray-100 dark:border-stone-800">
         {tasks.map((task) => (
           <TaskItem key={task.id} task={task} onToggle={toggle} />
         ))}

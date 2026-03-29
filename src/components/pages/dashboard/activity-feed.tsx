@@ -23,17 +23,17 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
   })).filter((g) => g.items.length > 0);
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-card">
+    <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-card dark:border-stone-700 dark:bg-stone-900">
 
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-0.5">
-          <h2 className="text-body font-semibold text-gray-900">Activity</h2>
-          <p className="text-body-sm text-gray-400">Team updates</p>
+          <h2 className="text-body font-semibold text-gray-900 dark:text-stone-50">Activity</h2>
+          <p className="text-body-sm text-gray-400 dark:text-stone-500">Team updates</p>
         </div>
         <button
           type="button"
-          className="text-body-sm font-medium text-brand-500 transition-colors hover:text-brand-600"
+          className="text-body-sm font-medium text-brand-500 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
         >
           View all
         </button>
@@ -45,10 +45,10 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
           <div key={group} className="flex flex-col gap-3">
             {/* Group label */}
             <div className="flex items-center gap-2">
-              <span className="text-caption font-semibold uppercase tracking-widest text-gray-400">
+              <span className="text-caption font-semibold uppercase tracking-widest text-gray-400 dark:text-stone-500">
                 {group}
               </span>
-              <span className="flex-1 border-t border-gray-100" />
+              <span className="flex-1 border-t border-gray-100 dark:border-stone-800" />
             </div>
 
             {/* Items */}

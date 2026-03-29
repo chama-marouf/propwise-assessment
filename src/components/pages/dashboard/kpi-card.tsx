@@ -27,12 +27,12 @@ export function KpiCard({ label, value, trend, trendDirection, sparklineData }: 
   const t = trendConfig[trendDirection];
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3.5 shadow-card">
+    <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3.5 shadow-card dark:border-stone-700 dark:bg-stone-900">
 
       {/* Left: label + value */}
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <p className="text-body-sm text-gray-400">{label}</p>
-        <p className="text-xl font-bold leading-tight text-gray-900">{value}</p>
+        <p className="text-body-sm text-gray-400 dark:text-stone-500">{label}</p>
+        <p className="text-xl font-bold leading-tight text-gray-900 dark:text-stone-50">{value}</p>
       </div>
 
       {/* Right: sparkline + trend */}
