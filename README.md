@@ -13,7 +13,7 @@ It includes:
 
 ## Live Demo
 
-[🔗 https://propwise-ssessment.vercel.app/dashboard]
+[🔗 https://propwise-assessment-sand.vercel.app/dashboard]
 
 ## Tech Stack
 
