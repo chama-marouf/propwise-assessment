@@ -60,10 +60,7 @@ export function DashboardShell() {
 
           {/* Tasks — col 2, row 2 */}
           <div className="lg:col-start-2 lg:row-start-2">
-            <TasksPanel
-              key={data?.tasks?.map((t) => t.id).join(",") ?? ""}
-              initialTasks={data?.tasks}
-            />
+            <TasksPanel initialTasks={data?.tasks} />
           </div>
         </div>
       </div>

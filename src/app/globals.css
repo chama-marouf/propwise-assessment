@@ -816,3 +816,20 @@
 .animate-slide-in-right { animation: slide-in-right 0.25s var(--ease-enter); }
 .animate-bar-grow       { animation: bar-grow 0.7s var(--ease-enter); }
 .animate-count-up       { animation: count-up 0.5s var(--ease-enter); }
+
+/* ─── prefers-reduced-motion ─────────────────────────────────────────────────
+   Respect the user's OS-level "Reduce Motion" setting by cutting all
+   decorative transitions to near-zero.  Functional transitions (e.g.
+   the sidebar slide, theme switch) keep a minimal 1ms so JS can still
+   listen to transitionend events without a timing surprise.
+──────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto   !important;
+  }
+}

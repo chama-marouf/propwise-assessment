@@ -11,11 +11,12 @@ import {
 } from "recharts";
 import type { RevenuePoint } from "@/types/dashboard";
 import { RevenueForecastSkeleton } from "./dashboard-skeleton";
+import { CHART_COLORS } from "@/lib/chart-tokens";
 
-// ── Colours ───────────────────────────────────────────────────────────────────
+// ── Colours (resolved from design-system @theme tokens via chart-tokens.ts) ───
 
-const C_THIS = "#3D52D5"; // brand-500
-const C_LAST = "#A5B4FC"; // brand-300
+const C_THIS = CHART_COLORS.brandPrimary;   // var(--color-brand-500)
+const C_LAST = CHART_COLORS.brandSecondary; // var(--color-brand-300)
 
 // ── Animated active dot ──────────────────────────────────────────────────────
 
@@ -132,16 +133,16 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
                 <stop offset="95%" stopColor={C_LAST} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} stroke="#E4E4E7" strokeDasharray="3 3" />
+            <CartesianGrid vertical={false} stroke={CHART_COLORS.gridLine} strokeDasharray="3 3" />
             <XAxis
               dataKey="month"
-              tick={{ fontSize: 11, fill: "#A0A0AB" }}
+              tick={{ fontSize: 11, fill: CHART_COLORS.axisTick }}
               tickLine={false}
               axisLine={false}
               dy={6}
             />
             <YAxis
-              tick={{ fontSize: 11, fill: "#A0A0AB" }}
+              tick={{ fontSize: 11, fill: CHART_COLORS.axisTick }}
               tickLine={false}
               axisLine={false}
               tickFormatter={(v) => `AED ${v}k`}

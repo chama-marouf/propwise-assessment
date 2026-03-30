@@ -98,11 +98,11 @@ export function DashboardHeader() {
           {/* Bell */}
           <button
             type="button"
-            aria-label="Notifications"
-            className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 shadow-xs transition-colors hover:bg-gray-50 hover:text-gray-700 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400 dark:hover:bg-stone-800"
+            aria-label="Notifications, 1 unread"
+            className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 shadow-xs transition-colors hover:bg-gray-50 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-400 dark:hover:bg-stone-800"
           >
             <IconBell />
-            <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
+            <span aria-hidden className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-red-500" />
           </button>
 
           {/* Create */}

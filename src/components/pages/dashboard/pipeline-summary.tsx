@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import type { PipelineStage } from "@/types/dashboard";
 import { PipelineSkeleton } from "./dashboard-skeleton";
+import { CHART_COLORS } from "@/lib/chart-tokens";
 
-// Dark navy bar colour matching the design
-const BAR_COLOR = "#1a2f6e";
+// Pipeline bar fill — high-contrast dark brand variant for legible white text
+const BAR_COLOR = CHART_COLORS.brandDark; // var(--color-brand-800)
 
 function IconExternalLink() {
   return (
@@ -41,7 +42,7 @@ export function PipelineSummary({ data }: PipelineSummaryProps) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-0.5">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-stone-50">Pipeline Summary</h2>
+          <h2 className="text-display-3 text-gray-900 dark:text-stone-50">Pipeline Summary</h2>
           <p className="text-body-sm text-gray-400 dark:text-stone-500">
             {totalDeals} deals across {data.length} stages
             {" · "}{totalValueStr} total value

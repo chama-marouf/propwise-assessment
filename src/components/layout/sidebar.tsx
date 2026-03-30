@@ -143,8 +143,8 @@ export function Sidebar() {
                 <div className="flex min-w-0 flex-1 flex-col">
                   <span className="truncate text-sm font-semibold text-gray-900 dark:text-stone-50">Lina Rahman</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="truncate text-[11px] text-gray-400 dark:text-stone-500">Atlas Estates</span>
-                    <span className="rounded-full bg-brand-500 px-1.5 py-0.5 text-[9px] font-bold leading-none text-white">Pro</span>
+                    <span className="truncate text-body-sm text-gray-400 dark:text-stone-500">Atlas Estates</span>
+                    <span className="rounded-full bg-brand-500 px-1.5 py-0.5 text-caption font-bold leading-none text-white">Pro</span>
                   </div>
                 </div>
                 <IconChevronDown className="shrink-0 text-gray-300 transition-transform duration-200 group-data-[state=open]:rotate-180 dark:text-stone-600" />
@@ -173,7 +173,7 @@ export function Sidebar() {
                   <span className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_0_3px_rgba(34,197,94,0.15)]" />
                   <span className="text-sm text-gray-700 dark:text-stone-300">Online</span>
                 </div>
-                <span className="rounded-full bg-green-50 px-2 py-0.5 text-[9px] font-bold tracking-wider text-green-700 dark:bg-green-950 dark:text-green-400">
+                <span className="rounded-full bg-green-50 px-2 py-0.5 text-caption font-bold tracking-wider text-green-700 dark:bg-green-950 dark:text-green-400">
                   ACTIVE
                 </span>
               </div>

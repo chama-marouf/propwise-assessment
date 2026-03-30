@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { TaskItem as TaskItemType } from "@/types/dashboard";
 import { ALL_TASKS } from "@/lib/mock-data";
+import { Progress } from "@/components/ui/progress";
 import { TaskItem } from "./task-item";
 
 // ── Icon ──────────────────────────────────────────────────────────────────────
@@ -22,13 +23,26 @@ interface TasksPanelProps {
 export function TasksPanel({ initialTasks }: TasksPanelProps) {
   const [tasks, setTasks] = useState<TaskItemType[]>(initialTasks ?? ALL_TASKS);
 
+  // "Adjust state during rendering" — React's recommended pattern for resetting
+  // derived state when a controlling prop changes, without a useEffect.
+  // (react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes)
+  const [prevInitial, setPrevInitial] = useState(initialTasks);
+  if (prevInitial !== initialTasks) {
+    setPrevInitial(initialTasks);
+    setTasks(initialTasks ?? ALL_TASKS);
+  }
+
   const toggle = (id: string) =>
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
 
-  const done    = tasks.filter((t) => t.done).length;
-  const total   = tasks.length;
-  const overdue = tasks.filter((t) => !t.done && t.dueState === "overdue").length;
-  const pct     = total > 0 ? Math.round((done / total) * 100) : 0;
+  // Derived stats — memoised so they only recalculate when tasks change.
+  const { done, total, overdue, pct } = useMemo(() => {
+    const done    = tasks.filter((t) => t.done).length;
+    const total   = tasks.length;
+    const overdue = tasks.filter((t) => !t.done && t.dueState === "overdue").length;
+    const pct     = total > 0 ? Math.round((done / total) * 100) : 0;
+    return { done, total, overdue, pct };
+  }, [tasks]);
 
   return (
     <div className="flex flex-col gap-0 rounded-xl border border-gray-200 bg-white shadow-card dark:border-stone-700 dark:bg-stone-900">
@@ -59,12 +73,7 @@ export function TasksPanel({ initialTasks }: TasksPanelProps) {
         <div className="mb-1.5 flex items-center justify-between text-caption">
           <span className="text-gray-400 dark:text-stone-500">{done}/{total} done</span>
         </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-stone-800">
-          <div
-            className="h-full rounded-full bg-green-500 transition-all duration-500"
-            style={{ width: `${pct}%` }}
-          />
-        </div>
+        <Progress value={pct} indicatorClassName="bg-green-500" />
       </div>
 
       {/* Task list */}
