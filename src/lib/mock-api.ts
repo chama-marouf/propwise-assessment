@@ -41,10 +41,10 @@ function buildKpis(period: DatePeriod): KpiData[] {
 
   const fmt = (n: number) =>
     n >= 1_000_000
-      ? `$${(n / 1_000_000).toFixed(1)}M`
+      ? `AED ${(n / 1_000_000).toFixed(1)}M`
       : n >= 1_000
-        ? `$${(n / 1_000).toFixed(0)}k`
-        : `$${n.toLocaleString()}`;
+        ? `AED ${(n / 1_000).toFixed(0)}k`
+        : `AED ${n.toLocaleString()}`;
 
   const spark = (base: number, dir: "up" | "down" | "flat"): number[] => {
     const pts: number[] = [];

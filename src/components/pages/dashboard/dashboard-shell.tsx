@@ -37,20 +37,29 @@ export function DashboardShell() {
 
         {/*
          * Main grid
-         *  Mobile  : single column
-         *  Desktop : left 3fr (revenue + pipeline) · right 1.2fr (activity + tasks)
+         *  Mobile  : single column, stacked in DOM order
+         *  Desktop : 2-column grid where Revenue (col1 row1) and Activity
+         *            (col2 row1) share the same row → identical height.
          */}
         <div className="grid grid-cols-1 gap-6.5 lg:grid-cols-[3fr_2fr]">
 
-          {/* Left */}
-          <div className="flex flex-col gap-6.5">
+          {/* Revenue — col 1, row 1 */}
+          <div className="lg:col-start-1 lg:row-start-1">
             <RevenueForecast data={data?.revenue} />
+          </div>
+
+          {/* Pipeline — col 1, row 2 */}
+          <div className="lg:col-start-1 lg:row-start-2">
             <PipelineSummary data={data?.pipeline} />
           </div>
 
-          {/* Right */}
-          <div className="flex flex-col gap-6.5">
+          {/* Activity — col 2, row 1: same row as Revenue → same height */}
+          <div className="lg:col-start-2 lg:row-start-1 lg:overflow-hidden">
             <ActivityFeed items={data?.activities} />
+          </div>
+
+          {/* Tasks — col 2, row 2 */}
+          <div className="lg:col-start-2 lg:row-start-2">
             <TasksPanel
               key={data?.tasks?.map((t) => t.id).join(",") ?? ""}
               initialTasks={data?.tasks}

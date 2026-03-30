@@ -50,7 +50,7 @@ function CustomTooltip({ active, payload, label }: {
             <span className="h-2 w-2 rounded-full" style={{ background: p.color }} />
             {p.name === "thisYear" ? "This Year" : "Last Year"}
           </span>
-          <span className="font-semibold text-gray-900 dark:text-stone-50">${p.value}k</span>
+          <span className="font-semibold text-gray-900 dark:text-stone-50">AED {p.value}k</span>
         </div>
       ))}
     </div>
@@ -92,7 +92,7 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
         <div className="flex flex-col gap-0.5">
           <div className="flex items-baseline gap-2">
             <span className="text-display-2 font-bold text-gray-900 dark:text-stone-50">
-              ${(TOTAL_THIS / 10).toFixed(1)}M
+              AED {(TOTAL_THIS / 10).toFixed(1)}M
             </span>
             <span className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-body-sm font-semibold text-green-600 dark:bg-green-950 dark:text-green-400">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
@@ -144,7 +144,7 @@ export function RevenueForecast({ data }: RevenueForecastProps) {
               tick={{ fontSize: 11, fill: "#A0A0AB" }}
               tickLine={false}
               axisLine={false}
-              tickFormatter={(v) => `$${v}k`}
+              tickFormatter={(v) => `AED ${v}k`}
             />
             <Tooltip
               content={<CustomTooltip />}

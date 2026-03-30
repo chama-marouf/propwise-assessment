@@ -48,9 +48,9 @@ export function parseValue(value: string): Parsed {
     return {
       raw,
       format: (n) => {
-        if (suffix === "M") return `$${(n / 1_000_000).toFixed(decimals)}M`;
-        if (suffix === "K") return `$${Math.round(n / 1_000)}k`;
-        return `$${Math.round(n).toLocaleString()}`;
+        if (suffix === "M") return `AED ${(n / 1_000_000).toFixed(decimals)}M`;
+        if (suffix === "K") return `AED ${Math.round(n / 1_000)}k`;
+        return `AED ${Math.round(n).toLocaleString()}`;
       },
     };
   }
@@ -77,16 +77,28 @@ interface UseCountUpOptions {
 }
 
 export function useCountUp({ value, duration = 1000, delay = 0 }: UseCountUpOptions): string {
-  const { raw, format } = parseValue(value);
-  const [display, setDisplay] = useState(() => format(0));
+  // prevValue lets us detect prop changes during render so we can reset the
+  // display to "0" immediately without calling setState inside a useEffect body
+  // (which the React compiler flags as a cascading-render risk).
+  const [prevValue, setPrevValue] = useState(value);
+  const [display,   setDisplay]   = useState(() => parseValue(value).format(0));
   const rafRef   = useRef<number | null>(null);
   const startRef = useRef<number | null>(null);
 
+  // React "adjust state during render" pattern (react.dev/learn/you-might-not-need-an-effect).
+  // When value changes, React re-renders once with the zero display before the
+  // animation effect even runs — no cascading useEffect → setState chain.
+  if (prevValue !== value) {
+    setPrevValue(value);
+    setDisplay(parseValue(value).format(0));
+  }
+
   useEffect(() => {
-    // Reset to 0 whenever value changes
-    setDisplay(format(0));
+    const { raw, format } = parseValue(value);
     startRef.current = null;
 
+    // All setState calls below are inside async callbacks (setTimeout / rAF),
+    // so the React compiler sees no synchronous setState in the effect body.
     const delayId = setTimeout(() => {
       const animate = (now: number) => {
         if (startRef.current === null) startRef.current = now;
@@ -100,6 +112,7 @@ export function useCountUp({ value, duration = 1000, delay = 0 }: UseCountUpOpti
           rafRef.current = requestAnimationFrame(animate);
         } else {
           setDisplay(format(raw)); // snap to exact final value
+          rafRef.current = null;
         }
       };
 
@@ -108,10 +121,11 @@ export function useCountUp({ value, duration = 1000, delay = 0 }: UseCountUpOpti
 
     return () => {
       clearTimeout(delayId);
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
     };
-  // Re-run when the raw numeric value or duration changes
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration, delay]);
 
   return display;

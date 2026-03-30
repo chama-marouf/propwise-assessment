@@ -131,14 +131,16 @@ interface ToastItemProps {
 }
 
 function ToastItem({ toast, onDismiss }: ToastItemProps) {
-  const [visible, setVisible] = useState(false);
-  const [exiting, setExiting] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const [visible,  setVisible]  = useState(false);
+  const [exiting,  setExiting]  = useState(false);
+  const exitingRef   = useRef(false);          // sync guard — avoids exiting in dismiss deps
+  const autoTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const exitTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const cfg        = TYPE_CONFIG[toast.type];
   const ActionIcon = toast.action?.icon ? ACTION_ICONS[toast.action.icon] : null;
 
-  // ── Enter: double-RAF so initial class paints before transition fires ──
+  // ── Enter: double-RAF so initial class paints before transition fires ─────
   useEffect(() => {
     const outer = requestAnimationFrame(() => {
       requestAnimationFrame(() => setVisible(true));
@@ -146,19 +148,31 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
     return () => cancelAnimationFrame(outer);
   }, []);
 
-  // ── Dismiss ──────────────────────────────────────────────────────────────
-  const dismiss = useCallback(() => {
-    if (exiting) return;
-    clearTimeout(timerRef.current);
-    setExiting(true);
-    setTimeout(() => onDismiss(toast.id), 300);
-  }, [exiting, toast.id, onDismiss]);
+  // ── Cancel all in-flight timers on unmount ────────────────────────────────
+  useEffect(() => {
+    return () => {
+      clearTimeout(autoTimerRef.current);
+      clearTimeout(exitTimerRef.current);
+    };
+  }, []);
 
-  // ── Auto-dismiss ─────────────────────────────────────────────────────────
+  // ── Dismiss ───────────────────────────────────────────────────────────────
+  // exitingRef is a synchronous guard so dismiss() is stable and the
+  // auto-dismiss effect below never reschedules when exiting changes.
+  const dismiss = useCallback(() => {
+    if (exitingRef.current) return;
+    exitingRef.current = true;
+    setExiting(true);
+    clearTimeout(autoTimerRef.current);
+    exitTimerRef.current = setTimeout(() => onDismiss(toast.id), 300);
+  }, [toast.id, onDismiss]);
+
+  // ── Auto-dismiss ──────────────────────────────────────────────────────────
+  // dismiss is now stable across exiting changes — schedules exactly once.
   useEffect(() => {
     if (!toast.duration) return;
-    timerRef.current = setTimeout(dismiss, toast.duration);
-    return () => clearTimeout(timerRef.current);
+    autoTimerRef.current = setTimeout(dismiss, toast.duration);
+    return () => clearTimeout(autoTimerRef.current);
   }, [dismiss, toast.duration]);
 
   const motionCls =
@@ -169,9 +183,8 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
   return (
     <div
       role="status"
-      aria-live="polite"
       className={[
-        "flex items-center gap-2 rounded-2xl px-3 py-2",
+        "flex items-center gap-2 rounded-full px-3.5 py-2.5",
         "text-body-sm font-medium whitespace-nowrap",
         "transition-all duration-300 ease-out",
         cfg.wrapper,
@@ -239,7 +252,7 @@ export function Toaster() {
   return (
     <div
       aria-label="Notifications"
-      className="pointer-events-none fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2"
+      className="pointer-events-none fixed bottom-4 right-4 z-400 flex flex-col items-end gap-2"
     >
       {/* Visible toasts — newest at top */}
       {visible.map((t) => (
